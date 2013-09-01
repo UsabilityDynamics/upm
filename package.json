@@ -35,6 +35,7 @@
     "rodent": "*",
     "bower": "*",
     "component": "*",
+    "component-builder": "*",
     "async": "*",
     "auto": "*",
     "request": "*",
