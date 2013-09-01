@@ -1,0 +1,40 @@
+{
+    "project": {
+        "name": "udx",
+        "description": "thing",
+        "version": "0.0.1",
+        "url": "https://github.com/UsabilityDynamics/udx/",
+        "logo": "http://a3d72a45d111006ec192-ec5b80a12b0b09b4d52373336afb4254.r80.cf1.rackcdn.com/usability-dynamics.png"
+    },
+    "files": {
+        "lib/udx.js": {
+            "name": "lib/udx.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {},
+    "classitems": [
+        {
+            "file": "lib/udx.js",
+            "line": 1,
+            "description": "-\n\n-",
+            "author": "potanin",
+            "date": "9/1/13",
+            "class": ""
+        }
+    ],
+    "warnings": [
+        {
+            "message": "unknown tag: date",
+            "line": " lib/udx.js:1"
+        },
+        {
+            "message": "Missing item type\n-\n\n-",
+            "line": " lib/udx.js:1"
+        }
+    ]
+}

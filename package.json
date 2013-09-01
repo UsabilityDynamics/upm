@@ -1,0 +1,50 @@
+{
+  "name": "udx",
+  "version": "0.0.1",
+  "description": "A package manager for the people.",
+  "private": true,
+  "keywords": [],
+  "license": "MIT",
+  "copyright" : "Copyright (c) 2013 Usability Dynamics, Inc.",
+  "author": {
+    "name": "Usability Dynamics",
+    "email": "info@usabilitydynamics.com",
+    "url": "http://usabilitydynamics.com"
+  },
+  "contributors": [ 
+    {
+      "name": "Andy Potanin",
+      "email": "andy@usabilitydynamics.com",
+      "url": "http://usabilitydynamics.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UsabilityDynamics/udx"
+  },
+  "main": "index.js",
+  "directories": {
+    "doc": "./static/wiki",
+    "lib": "./lib",
+    "bin": "./bin"
+  },
+  "main": "./lib/udx.js",
+  "bin": "./bin/udx.js",
+  "dependencies": {
+    "npm": "*",
+    "async": "*",
+    "auto": "*",
+    "request": "*",
+    "colors": "*",
+    "commander": "*",
+    "extend": "*",
+    "debug": "*",
+    "object-emitter": "*",
+    "object-settings": "*"
+  },
+  "engines": {
+    "node": ">=0.6",
+    "npm": "1"
+  },
+  "scripts": {}
+}
