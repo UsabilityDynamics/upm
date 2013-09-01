@@ -2,13 +2,20 @@
 
   udx [command]
 
-Available provisioning commands:
+### Component Commands:
 
-  list    list available deploy targets
-  init    <target> - prepares target to accept deployments
-  start   <target> - starts the remote server and deploy
-  stop    <target> - stops the remote server
-  deploy  <target> [--branch branch] - deploy code
+- udx create  <name>
+- udx build   -o output-directory-name -n built-file-basename
+- udx install -o custom-directory-for/component-dependancies
+- udx info
+
+### Provisioning Commands:
+
+- udx list    list available deploy targets/environments.
+- udx init    <target> - prepares target to accept deployments
+- udx start   <target> - starts the remote server and deploy
+- udx stop    <target> - stops the remote server
+- udx deploy  <target> [--branch branch] - deploy code
 
 ## License
 
