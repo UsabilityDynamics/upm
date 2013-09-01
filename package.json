@@ -32,6 +32,9 @@
   "bin": "./bin/udx.js",
   "dependencies": {
     "npm": "*",
+    "rodent": "*",
+    "bower": "*",
+    "component": "*",
     "async": "*",
     "auto": "*",
     "request": "*",

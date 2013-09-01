@@ -1,1 +1,2 @@
-console.log( 'hello' );
+#!/usr/bin/env node
+console.log( '--udx--' );

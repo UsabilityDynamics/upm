@@ -1,3 +1,15 @@
+## Usage
+
+  udx [command]
+
+Available provisioning commands:
+
+  list    list available deploy targets
+  init    <target> - prepares target to accept deployments
+  start   <target> - starts the remote server and deploy
+  stop    <target> - stops the remote server
+  deploy  <target> [--branch branch] - deploy code
+
 ## License
 
 (The MIT License)
