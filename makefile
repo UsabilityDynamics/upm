@@ -6,10 +6,10 @@ HTML_FILE = static/coverage.html
 test-all: clean document lib-cov test-code
 
 document:
-	yuidoc -q
+	yuidoc -q --configfile static/yuidoc.json
   
 push:
-	yuidoc
+	yuidoc -q --configfile static/yuidoc.json
 	git add . && git commit -m "WIP" && git push
 
 test-code:
