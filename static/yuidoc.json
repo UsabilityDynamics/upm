@@ -10,8 +10,6 @@
     "extension": ".js",
     "tabtospace": 2,
     "outdir": "./static/codex",
-    "paths": [
-      "../lib"
-    ]
+    "paths": [ "./lib" ]
   }
 }
