@@ -1,0 +1,305 @@
+{
+  "name": "Package",
+  "type": "object",
+  "additionalProperties": false,
+  "description": "Schema specification for UDX packages which combine functionality found in NPM, Composer and Component package managers.",
+  "properties": {
+    "authors": {
+      "type": [ "array", "string" ],
+      "description": "List of authors that contributed to the package. This is typically the main maintainers, not the full list.",
+      "items": {
+        "type": "object",
+        "required": false,
+        "properties": {
+          "email": {
+            "type": "string",
+            "required": false
+          },
+          "homepage": {
+            "type": "string",
+            "required": false
+          },
+          "name": {
+            "type": "string",
+            "required": false
+          },
+          "role": {
+            "type": "string",
+            "required": false
+          }
+        }
+      }
+
+    },
+    "bin": {
+      "type": "object",
+      "required": false,
+      "properties": {
+        "flawless": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    "bugs": {
+      "type": "object",
+      "required": false,
+      "properties": {
+        "email": {
+          "type": "string",
+          "required": false
+        },
+        "url": {
+          "type": "string",
+          "id": "http://jsonschema.net/bugs/url",
+          "required": false
+        }
+      }
+    },
+    "config": {
+      "type": "object",
+      "required": false,
+      "properties": {
+        "bin-dir": {
+          "type": "string",
+          "required": false
+        },
+        "provisioning": {
+          "type": "object",
+          "required": false,
+          "properties": {
+            "production": {
+              "type": "object",
+              "required": false,
+              "properties": {
+                "env": {
+                  "type": "object",
+                  "required": false,
+                  "properties": {
+                    "HOST": {
+                      "type": "string",
+                      "required": false
+                    },
+                    "NODE_ENV": {
+                      "type": "string",
+                      "required": false
+                    },
+                    "PORT": {
+                      "type": "number",
+                      "required": false
+                    }
+                  }
+                },
+                "ssh": {
+                  "type": "object",
+                  "required": false,
+                  "properties": {
+                    "hosts": {
+                      "type": "array",
+                      "required": false,
+                      "items": {
+                        "type": "string",
+                        "required": false
+                      }
+
+                    },
+                    "port": {
+                      "type": "number",
+                      "default": 22,
+                      "required": false
+                    },
+                    "user": {
+                      "type": "string",
+                      "required": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "target-dir": {
+      "description": "Forces the package to be installed into the given subdirectory path. This is used for autoloading PSR-0 packages that do not contain their full path. Use forward slashes for cross-platform compatibility.",
+      "type": "string",
+      "default": "Uses either ./components, ./vendor, or ./node_modules depending on the type of package. Setting the target-dir will override it for all package types."
+    },
+    "dependencies": {
+      "type": "object",
+      "description": "Equivalent of Composer's 'require' property."
+    },
+    "description": {
+      "type": "string",
+      "description": "Short package description.",
+      "required": true
+    },
+    "directories": {
+      "type": "object",
+      "required": false,
+      "properties": {
+        "fonts": {
+          "type": "array",
+          "required": false,
+          "items": {
+            "type": "string"
+          }
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scripts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "required": false
+          }
+
+        },
+        "styles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "templates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "engines": {
+      "type": "object",
+      "required": false,
+      "properties": {
+        "node": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    "homepage": {
+      "type": "string",
+      "required": false
+    },
+    "keywords": {
+      "type": "array",
+      "required": false,
+      "items": {
+        "type": "string",
+        "required": false
+      }
+
+    },
+    "license": {
+      "type": "array",
+      "required": false,
+      "items": {
+        "type": "string",
+        "required": false
+      }
+
+    },
+    "main": {
+      "type": "string",
+      "default": "idnex.js",
+      "required": false
+    },
+    "name": {
+      "type": "string",
+      "description": "Package name, including 'vendor-name/' prefix.",
+      "required": true
+    },
+    "private": {
+      "type": "boolean",
+      "default": false,
+      "required": false
+    },
+    "repository": {
+      "type": "object",
+      "required": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "required": false
+        },
+        "url": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    "scripts": {
+      "type": "object",
+      "required": false,
+      "properties": {
+        "postdeploy": {
+          "type": "string",
+          "required": false
+        },
+        "predeploy": {
+          "type": "string",
+          "required": false
+        },
+        "start": {
+          "type": "string",
+          "required": false
+        },
+        "test": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    "repositories": {
+      "type": "array",
+      "description": "A set of additional repositories where packages can be found. This is equivalent of 'remotes' in Component.",
+      "required": false,
+      "items": {
+        "type": ["object", "array"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "required": false
+          },
+          "url": {
+            "type": "string",
+            "required": true
+          },
+          "url": {
+            "type": "string",
+            "required": true
+          }
+        }
+      }
+
+    },
+    "type": {
+      "type": "string",
+      "description": "Package.",
+      "default": "library",
+      "enum": [
+        "library",
+        "node",
+        "component",
+        "codeigniter-library",
+        "codeigniter-third-party",
+        "codeigniter-module",
+        "drupal-module",
+        "drupal-theme",
+        "wordpress-plugin",
+        "wordpress-plugin",
+        "wordpress-theme"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "required": false
+    }
+  }
+}

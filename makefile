@@ -7,6 +7,10 @@ test-all: clean document lib-cov test-code
 
 document:
 	yuidoc -q
+  
+push:
+	yuidoc
+	git add . && git commit -m "WIP" && git push
 
 test-code:
 	@NODE_ENV=test mocha \
