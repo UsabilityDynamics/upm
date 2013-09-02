@@ -5,6 +5,7 @@
   "keywords": [ "package", "build" ],
   "license": "MIT",
   "copyright" : "Copyright (c) 2013 Usability Dynamics, Inc.",
+  "preferGlobal": true,
   "author": {
     "name": "Usability Dynamics",
     "email": "info@usabilitydynamics.com",
@@ -17,6 +18,11 @@
       "url": "http://usabilitydynamics.com"
     }
   ],
+  "bin": {
+    "udx": "bin/udx",
+    "udx-scaffold": "bin/udx scaffold",
+    "udx-provision": "bin/udx provision"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/UsabilityDynamics/udx"
@@ -27,20 +33,43 @@
     "bin": "./bin"
   },
   "main": "./lib/udx.js",
-  "bin": "./bin/udx.js",
   "dependencies": {
+    "commander": "1.0.5",
+    "mkdirp": "0.3.4",
+    "superagent": "0.15.3",
+    "component-builder": "0.9.0",
+    "string-to-js": "0.0.1",
+    "jog": "0.4.0",
+    "batch": "0.3.2",
+    "win-fork": "1.0.0",
+    "archy": "0.0.2",
+    "netrc": "~0.1.0",
+    "debug": "*",
+    "rimraf": "~2.1.4",
+    "nopt": "*",
+    "chalk": "*",
+    "lodash": "*",
+    "sudo-block": "*",
+    "insight": "*",
+    "scaffolding": "*",
+    "update-notifier": "*",
+    "yeoman-generator": "*",
     "npm": "*",
+    "cli-table": "*",
+    "abstract": "*",
     "rodent": "*",
     "bower": "*",
+    "optimist": "*",
+    "semver": "*",
     "component": "*",
-    "component-builder": "*",
     "async": "*",
     "auto": "*",
     "request": "*",
     "colors": "*",
-    "commander": "*",
+    "mustache": "*",
+    "wrench": "*",
+    "prompt": "*",
     "extend": "*",
-    "debug": "*",
     "object-emitter": "*",
     "object-settings": "*"
   },

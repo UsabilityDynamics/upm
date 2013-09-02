@@ -1,21 +1,46 @@
+UDX is a CLI client for working with modular packages.
+
+  As soon as you have a composer.json in a directory, that directory is a package.
+  When you add a require to a project, you are making a package that depends on other packages.
+  The only difference between your project and libraries is that your project is a package without a name.
+
+
 ## Usage
+The follow are abstracted CLI commands that are repository/platform independent.
+All CLI commands always execute in the current working directory.
 
-  udx [command]
+  udx-create           create a new package.json file, makefile and other scaffolding
+  udx-update           updates dependancies of
+  udx-install          install a new dependancy or update all existing dependancies
+  udx-build            compile the package and prepare for distribution
+  udx-deploy           deploy code to a web server
+  udx-push             commit package to repository
+  udx-pull             pull package from repository
 
-### Component Commands:
+## Supported Repositories and Dependency Managers
 
-- udx create  <name>
-- udx build   -o output-directory-name -n built-file-basename
-- udx install -o custom-directory-for/component-dependancies
-- udx info
+### Packagist
+For PHP libraries the Packagist repository is used which is strongly based on NPM.
+Composer works with Packagist.org, GitHub, SVN as well as with ZIP, Tar and text files accessible via the web.
+Packagist must all loaded into the same directory (usually called Vendor).
 
-### Provisioning Commands:
+### NPM
+The Node.js repository is supported inherently since udx is a Node.js module.
 
-- udx list    list available deploy targets/environments.
-- udx init    <target> - prepares target to accept deployments
-- udx start   <target> - starts the remote server and deploy
-- udx stop    <target> - stops the remote server
-- udx deploy  <target> [--branch branch] - deploy code
+### Git & SVN
+UDX recognizes when working within a Git or SVN repository and will commit code to either one.
+
+### Composer
+Composer is a tool for dependency management in PHP that uses Packagist as well as others.
+It allows you to declare the dependent libraries your project needs and it will install them in your project for you.
+
+### Component.io
+For front-end libraries that may include JavaScript, CSS, images and even fonts the Component package type is best.
+Component will handle combining scripts and styles and fixing URLs.
+
+## Coming Later
+ - Bower
+ - WordPress.org
 
 ## License
 
