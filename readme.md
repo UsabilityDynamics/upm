@@ -1,19 +1,26 @@
-UDX is a CLI client for working with modular packages.
+UDX is a CLI client for working with modules and packages that span accross multiple super projects most with their own repositories. 
 
-  As soon as you have a composer.json in a directory, that directory is a package.
+ * Integrate and reuse Packages within other projects.
+ * Packages should be free to move around yet still stay in synchronization with their own repository.
+ * UDX prevents multiple instance of a Package from falling out of synchronization.
+ * UDX can be used to create a new Package, define and download dependancies, generate a build and push back to own repository without any conflict from the super repository.
+
+
+  "As soon as you have a composer.json in a directory, that directory is a package.
   When you add a require to a project, you are making a package that depends on other packages.
-  The only difference between your project and libraries is that your project is a package without a name.
-
+  The only difference between your project and libraries is that your project is a package without a name."
+  
 
 ## Usage
 The follow are abstracted CLI commands that are repository/platform independent.
 All CLI commands always execute in the current working directory.
 
-  udx-create           create a new package.json file, makefile and other scaffolding
+  udx-init             initialize a new package.json file, makefile and other scaffolding
   udx-update           updates dependancies of
   udx-install          install a new dependancy or update all existing dependancies
   udx-build            compile the package and prepare for distribution
   udx-deploy           deploy code to a web server
+  udx-sync             attempts to sync up all instances of the package with their repository
   udx-push             commit package to repository
   udx-pull             pull package from repository
 
