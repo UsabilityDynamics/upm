@@ -85,14 +85,96 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 /**
- * -
  *
- * -
- *
- * @author potanin
- * @date 9/1/13
  */
-module.exports = {}
+require( &#x27;abstract&#x27; ).createModel( module.exports = function UPM () {
+
+  var readline  = require( &#x27;readline&#x27; );
+
+  // Instance Properties.
+  UPM.defineProperties( UPM, {
+    Activity: {
+      value: require( &#x27;./provision&#x27; ),
+      configurable: true,
+      enumerable: true,
+      writable: true
+    },
+    Package: {
+      value: require( &#x27;./package&#x27; ),
+      configurable: true,
+      enumerable: true,
+      writable: true
+    },
+    Scaffold: {
+      value: require( &#x27;./scaffold&#x27; ),
+      configurable: true,
+      enumerable: true,
+      writable: true
+    },
+    Repository: {
+      value: require( &#x27;./repository&#x27; ),
+      configurable: true,
+      enumerable: true,
+      writable: true
+    }
+  });
+
+  // Prototype
+  UPM.defineProperties( UPM.prototype, {
+    debug: {
+      value: require( &#x27;debug&#x27; )( &#x27;upm&#x27; ),
+      enumerable: true,
+      configurable: true
+    },
+    completer: {
+      value: function completer ( line ) {
+
+        var completions = &#x27;.help .error .exit .quit .q&#x27;.split( &#x27; &#x27; )
+        var hits = completions.filter( function ( c ) {
+          return c.indexOf( line ) == 0
+        } )
+
+        // show all completions if none found
+        return [hits.length ? hits : completions, line]
+
+      },
+      enumerable: true,
+      configurable: true
+    },
+    menu: {
+      value: function(args){
+
+      },
+      enumerable: true,
+      configurable: true
+    },
+    parse: {
+      value: function( args ) {
+
+        if( &#x27;string&#x27; === typeof args ) {
+          args = args.split( &#x27; &#x27; );
+        }
+
+        return parser( args );
+
+      },
+      enumerable: true,
+      configurable: true
+    }
+  });
+
+  /**
+   *
+   */
+  UPM.defineConstructor( function start ( settings ) {
+
+    var self    = require( &#x27;object-emitter&#x27; ).mixin( this );
+
+  });
+
+});
+
+
     </pre>
 </div>
 

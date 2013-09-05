@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>lib/upm.js - udx</title>
+    <title>lib/scaffold/index.js - udx</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -80,19 +80,80 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: lib/upm.js</h1>
+                        <h1 class="file-heading">File: lib/scaffold/index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 /**
- * -
  *
- * -
- *
- * @author potanin
- * @date 9/1/13
  */
-module.exports = {}
+function Scaffold( options ) {
+
+  var dirname = require( &#x27;path&#x27; ).dirname;
+  var join = require( &#x27;path&#x27; ).join;
+  var readFileSync = require( &#x27;fs&#x27; ).readFileSync;
+  var fs = require( &#x27;fs&#x27; );
+  var path = require( &#x27;path&#x27; );
+  var prompt = require( &#x27;prompt&#x27; );
+  var mustache = require( &#x27;mustache&#x27; );
+  var wrench = require( &#x27;wrench&#x27; );
+
+  this.set( &#x27;path&#x27;, join( dirname( module.filename ), &#x27;models&#x27;, this.get( &#x27;type&#x27; ) ) );
+
+  var json = this.get( &#x27;path&#x27; ) || &#x27;wordpress-plugin.json&#x27;;
+
+  if ( !readFileSync( json ) ) {
+    throw Error( &quot;wordpress-plugin.json not found&quot; );
+  }
+
+  var config = JSON.parse( readFileSync( json, &#x27;utf8&#x27; ).toString().replace( /\n/g, &#x27;&#x27; ) );
+
+  prompt.start();
+
+  prompt.get( config, function ( err, result ) {
+
+    var tpls = config.tpl || {};
+
+    Object.keys( tpls ).forEach( function ( tpl ) {
+
+      var dist = mustache.render( tpls[tpl], result );
+      var distDir = dirname( dist );
+
+      if ( fs.statSync( tpl ).isFile() ) {
+        wrench.mkdirSyncRecursive( distDir );
+        fs.writeFileSync( dist, mustache.render( fs.readFileSync( tpl, &#x27;utf-8&#x27; ), result ) );
+      } else {
+        wrench.mkdirSyncRecursive( distDir );
+        wrench.copyDirSyncRecursive( tpl, dist );
+        wrench.readdirSyncRecursive( dist ).forEach( function ( file ) {
+          file = path.join( dist, file );
+          fs.writeFileSync( file, mustache.render( fs.readFileSync( file, &#x27;utf-8&#x27; ), result ), &#x27;utf-8&#x27; );
+        } );
+      }
+
+    } );
+
+  } );
+
+}
+
+/**
+ *
+ */
+Object.defineProperties( module.exports = Scaffold, {
+  method: {
+    value: function method () {
+
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true
+  }
+})
+
+
+
+
     </pre>
 </div>
 

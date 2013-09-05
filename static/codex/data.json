@@ -7,8 +7,43 @@
         "logo": "http://a3d72a45d111006ec192-ec5b80a12b0b09b4d52373336afb4254.r80.cf1.rackcdn.com/usability-dynamics.png"
     },
     "files": {
-        "lib/udx.js": {
-            "name": "lib/udx.js",
+        "lib/install/index.js": {
+            "name": "lib/install/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/package/index.js": {
+            "name": "lib/package/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/provision/index.js": {
+            "name": "lib/provision/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/repository/index.js": {
+            "name": "lib/repository/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/scaffold/index.js": {
+            "name": "lib/scaffold/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/upm.js": {
+            "name": "lib/upm.js",
             "modules": {},
             "classes": {},
             "fors": {},
@@ -19,22 +54,78 @@
     "classes": {},
     "classitems": [
         {
-            "file": "lib/udx.js",
+            "file": "lib/install/index.js",
             "line": 1,
-            "description": "-\n\n-",
-            "author": "potanin",
-            "date": "9/1/13",
+            "class": ""
+        },
+        {
+            "file": "lib/package/index.js",
+            "line": 1,
+            "class": ""
+        },
+        {
+            "file": "lib/provision/index.js",
+            "line": 1,
+            "class": ""
+        },
+        {
+            "file": "lib/repository/index.js",
+            "line": 1,
+            "class": ""
+        },
+        {
+            "file": "lib/scaffold/index.js",
+            "line": 1,
+            "class": ""
+        },
+        {
+            "file": "lib/scaffold/index.js",
+            "line": 54,
+            "class": ""
+        },
+        {
+            "file": "lib/upm.js",
+            "line": 1,
+            "class": ""
+        },
+        {
+            "file": "lib/upm.js",
+            "line": 80,
             "class": ""
         }
     ],
     "warnings": [
         {
-            "message": "unknown tag: date",
-            "line": " lib/udx.js:1"
+            "message": "Missing item type",
+            "line": " lib/install/index.js:1"
         },
         {
-            "message": "Missing item type\n-\n\n-",
-            "line": " lib/udx.js:1"
+            "message": "Missing item type",
+            "line": " lib/package/index.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " lib/provision/index.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " lib/repository/index.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " lib/scaffold/index.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " lib/scaffold/index.js:54"
+        },
+        {
+            "message": "Missing item type",
+            "line": " lib/upm.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " lib/upm.js:80"
         }
     ]
 }

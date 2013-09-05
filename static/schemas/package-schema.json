@@ -29,7 +29,6 @@
           }
         }
       }
-
     },
     "bin": {
       "type": "object",
@@ -203,7 +202,6 @@
         "type": "string",
         "required": false
       }
-
     },
     "main": {
       "type": "string",

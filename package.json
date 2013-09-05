@@ -1,5 +1,5 @@
 {
-  "name": "udx",
+  "name": "upm",
   "version": "0.0.1",
   "description": "A package manager for the people.",
   "keywords": [ "package", "build" ],
@@ -19,26 +19,28 @@
     }
   ],
   "bin": {
-    "udx": "bin/udx",
-    "udx-scaffold": "bin/udx scaffold",
-    "udx-provision": "bin/udx provision"
+    "upm": "./bin/upm.js",
+    "upm-build": "./bin/upm.js",
+    "upm-create": "./bin/upm.js",
+    "upm-provision": "./bin/upm.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/UsabilityDynamics/udx"
+    "url": "https://github.com/UsabilityDynamics/upm"
   },
   "directories": {
     "doc": "./static/wiki",
     "lib": "./lib",
     "bin": "./bin"
   },
-  "main": "./lib/udx.js",
+  "main": "./lib/upm.js",
   "dependencies": {
+    "recess": "*",
     "commander": "1.0.5",
     "mkdirp": "0.3.4",
     "superagent": "0.15.3",
-    "component-builder": "0.9.0",
-    "string-to-js": "0.0.1",
+    "component-builder": "*",
+    "string-to-js": "*",
     "jog": "0.4.0",
     "batch": "0.3.2",
     "win-fork": "1.0.0",
