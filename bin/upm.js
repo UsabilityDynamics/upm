@@ -122,15 +122,22 @@ function Interface() {
   program
     .command( 'build' )
     .description( 'Build.' )
-    .option('-s, --standalone <name>', 'build a stand-alone version of the component')
-    .option('-o, --out <dir>', 'output directory defaulting to ./build', 'build')
-    .option('-n, --name <file>', 'base name for build files defaulting to build', 'build')
-    .option('-p, --prefix <prefix>', 'prefix css asset urls with <prefix>')
-    .option('-c, --copy', 'copy files instead of linking')
-    .option('-u, --use <name>', 'use the given build plugin(s)')
-    .option('-R, --no-require', 'exclude require from build')
+    .option( '-o, --out <dir>', 'output directory defaulting to ./build', 'build' )
+    .option( '-n, --name <file>', 'base name for build files defaulting to build', 'build ' )
+    .option( '-p, --prefix <prefix>', 'prefix css asset urls with <prefix>')
+    .option( '-u, --use <name>', 'use the given build plugin(s)')
     .action( function build( config ) {
-      console.log( 'build!' );
+      upm.debug( 'Building the [%s] branch.', config.branch );
+
+      var _builder = upm.Builder({
+        prefix: config.prefix,
+        require: false
+      });
+
+      _builder.on( 'complete', function() {
+        console.log( 'Build comlete.' );
+      });
+
     });
 
   program
@@ -140,7 +147,6 @@ function Interface() {
     .action( function build( config ) {
       console.log( 'provision!' );
     });
-
 
   // Parse arguments
   program.parse( process.argv );
