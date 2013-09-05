@@ -67,26 +67,32 @@ function Interface() {
     .description( 'Install component dependencies.' )
     .option( '-o, --out <dir>', 'output directory defaulting to ./build', 'build' )
     .option( '-n, --name <file>', 'base name for build files defaulting to build', 'build' )
+    .option( '-b, --branch <branch>', 'install from branch', 'master' )
     .option( '-p, --prefix <prefix>', 'prefix css asset urls with <prefix>')
     .action( function install( config ) {
       upm.debug( 'Installing component dependancies from the [%s] branch.', config.branch );
 
       // Load component.json
-      var project = new upm.Project().load();
+      var project = new upm.Project();
 
-      console.log( require( 'util' ).inspect( project, { showHidden: true, colors: true, depth: 2 } ) )
-
-      return;
-
-      if( _package.__packages ) {
-
+      // Project is broken.
+      if( project instanceof Error ) {
+        return console.log( 'Unable to load project', error.message );
       }
 
-      return;
+      // No dependencies to update.
+      if( !project.have_dependencies ) {
+        return console.log( 'No dependencies to update.')
+      }
 
-      upm.Package({
-
+      // Run the udpate.
+      project.update({
+        force: true
       });
+
+      setTimeout( function() {
+
+      }, 3000 )
 
       return;
 
