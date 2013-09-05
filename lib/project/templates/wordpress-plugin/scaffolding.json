@@ -12,6 +12,6 @@
   },
   "tpl": {
     "/base.js": "{{name}}.js",
-    "/base.md": "{{name}}.md"
+    "/readme.md": "readme.md"
   }
 }

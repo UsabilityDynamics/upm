@@ -39,12 +39,20 @@
  * @todo Determine filename by getting basename of argv[1]
  * @constructor
  */
-function Interface() {
+function cli() {
 
   // Private Properties.
   var upm       = require( '../' ).start();
-  var program   = require( 'commander' );
+  var commander = require( 'commander' ).Command;
   var extend    = require( 'extend' );
+  var basename  = require( 'path' ).basename;
+  var logger    = require( 'winston' );
+  var program   = new commander( 'upm' );
+
+  // Handle dashed-commands.
+  if( process.argv.length === 2 && basename( process.argv[1] ) != 'upm' ) {
+    // process.argv[1] = process.argv[1].replace( '-', ' ' );
+  }
 
   program
     .usage( '[command] [options]' )
@@ -58,7 +66,24 @@ function Interface() {
     .option( '-t, --type <type>', 'Type of project.', 'library' )
     .option( '-v, --version <version>', 'Component version.', '0.0.1' )
     .action( function create( config ) {
-      upm.debug( 'Creating component [%s] at [%s].', config.name, config.repository );
+      logger.info( 'Creating a [%s] project called [%s].', config.type, config.name );
+
+      // Load component.json
+      var project = new upm.Project({
+        name: config.name,
+        version: config.version,
+        type: config.type,
+        repository: {
+          type: 'git',
+          url: [ 'https://github.com', config.repository ].join( '/' )
+        }
+      });
+
+      if( !project.is_valid ) {
+        return logger.error( 'Could not create project.' );
+      }
+
+      project.create()
 
     });
 
@@ -70,19 +95,19 @@ function Interface() {
     .option( '-b, --branch <branch>', 'install from branch', 'master' )
     .option( '-p, --prefix <prefix>', 'prefix css asset urls with <prefix>')
     .action( function install( config ) {
-      upm.debug( 'Installing component dependancies from the [%s] branch.', config.branch );
+      logger.info( 'Installing component dependancies from the [%s] branch.', config.branch );
 
       // Load component.json
       var project = new upm.Project();
 
       // Project is broken.
-      if( project instanceof Error ) {
-        return console.log( 'Unable to load project', error.message );
+      if( !project.is_valid ) {
+        return logger.error( 'Unable to run install or an invalid project.' );
       }
 
       // No dependencies to update.
       if( !project.have_dependencies ) {
-        return console.log( 'No dependencies to update.')
+        return logger.info( 'No dependencies to update.')
       }
 
       // Run the udpate.
@@ -90,9 +115,7 @@ function Interface() {
         force: true
       });
 
-      setTimeout( function() {
-
-      }, 3000 )
+      // logger.info( 'Installing component dependancies from the [%s] branch.', config.branch );
 
       return;
 
@@ -121,7 +144,7 @@ function Interface() {
 
   program
     .command( 'build' )
-    .description( 'Build.' )
+    .description( 'Compile components.' )
     .option( '-o, --out <dir>', 'output directory defaulting to ./build', 'build' )
     .option( '-n, --name <file>', 'base name for build files defaulting to build', 'build ' )
     .option( '-p, --prefix <prefix>', 'prefix css asset urls with <prefix>')
@@ -148,18 +171,25 @@ function Interface() {
       console.log( 'provision!' );
     });
 
-  // Parse arguments
-  program.parse( process.argv );
-
   // Render help if no arguments passed
   if( process.argv.length === 2 ) {
     program.outputHelp()
   }
 
+  // Parse arguments
+  program.parse( process.argv );
+
 }
 
 // Instantiate and export.
-Object.defineProperties( module.exports = new Interface, {
+Object.defineProperties( module.exports = new cli, {
+  print: {
+    value: function print() {
+      console.log.apply( console, arguments );
+    },
+    enumerable: true,
+    configurable: true
+  },
   completer: {
     value: function completer( line ) {
 
