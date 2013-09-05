@@ -1,149 +1,186 @@
 #!/usr/bin/env node
 
 /**
- * Binary Constructor
+ * Usability Dynamics Package Manager CLI
  *
- * To Debug:
+ *    upm-create
+ *    upm-install
+ *    upm-update
+ *    upm-commit
+ *    upm-build
+ *    upm-provision
  *
- *    DEBUG=upm* upm
+ * @example
  *
+ *    // Create new component.
+ *    upm create -n lib-example -r UsabilityDynamics/ud-lib-example
+ *
+ *    // Update core package from repository, fetch dependencies and build.
+ *    upm update
+ *
+ *    // Fetch dependencies and build.
+ *    upm install
+ *
+ *    // Install a specific omponent, e.g. emitter
+ *    upm install -c component/emitter
+ *
+ *    // Commit to GitHub with message.
+ *    upm commit -m "General updates."
+ *
+ *    // Build computed components.
+ *    upm build
+ *
+ *    // Deploy to production environment.
+ *    upm provision -e production
+ *
+ *    // Show debug messages.
+ *    DEBUG=upm* upm install
+ *
+ * @todo Determine filename by getting basename of argv[1]
  * @constructor
  */
 function Interface() {
 
   // Private Properties.
-  var udx = require( '../' ).start();
+  var upm       = require( '../' ).start();
+  var program   = require( 'commander' );
+  var extend    = require( 'extend' );
 
-  // @todo Determine filename by getting basename of argv[1]
+  program
+    .usage( '[command] [options]' )
+    .version( upm.get( 'package' ).version )
 
-  udx.debug( 'CLI Started.' );
+  program
+    .command( 'create' )
+    .description( 'Create new project.' )
+    .option( '-n, --name <name>', 'Component name.', 'new-project' )
+    .option( '-r, --repository <repository>', 'Path to GitHub repository.', 'UsabilityDynamics/new-project' )
+    .option( '-t, --type <type>', 'Type of project.', 'library' )
+    .option( '-v, --version <version>', 'Component version.', '0.0.1' )
+    .action( function create( config ) {
+      upm.debug( 'Creating component [%s] at [%s].', config.name, config.repository );
 
-  var auto = require( 'auto' );
-  var extend = require( 'extend' );
-  var realpath = require( 'fs' ).realpathSync;
-  var exists = require( 'fs' ).existsSync;
-  var dirname = require( 'path' ).dirname;
-  var basename = require( 'path' ).basename;
-  var Builder = require( 'component-builder' );
-  var resolve = require.resolve;
-  var program = require( 'commander' );
-  var component = require( 'component' );
-  var Package = require( 'component/lib/Package' );
-  var utils = component.utils;
-  var path = require( 'path' );
-  var fs = require( 'fs' );
-  var join = path.join;
-  var read = fs.readFileSync;
-  var readdir = fs.readdirSync;
-  var mkdir = require( 'mkdirp' ).sync;
-  //var readme = require('../readme.md');
-  var log = component.utils.log;
+    });
 
-  udx.on( 'prompt::scaffolding', function scaffolding() {
+  program
+    .command( 'install' )
+    .description( 'Install component dependencies.' )
+    .option( '-o, --out <dir>', 'output directory defaulting to ./build', 'build' )
+    .option( '-n, --name <file>', 'base name for build files defaulting to build', 'build' )
+    .option( '-p, --prefix <prefix>', 'prefix css asset urls with <prefix>')
+    .action( function install( config ) {
+      upm.debug( 'Installing component dependancies from the [%s] branch.', config.branch );
 
-    udx.set( 'cwd', process.cwd );
-    udx.set( 'type', type );
+      // Load component.json
+      var project = new upm.Project().load();
 
-    // Initialize Scaffolding Constructor.
-    udx.Scaffold.call( udx );
+      console.log( require( 'util' ).inspect( project, { showHidden: true, colors: true, depth: 2 } ) )
 
-  } );
+      return;
 
-  var pkg = new Package( 'UsabilityDynamics/wp-libs', 'master', {
-    force: false,
-    dev: false,
-    remotes: [ "https://raw.github.com" ],
-    concurrency: 10
-  } );
+      if( _package.__packages ) {
 
-  pkg.install();
+      }
 
-  try {
-    //var path = resolve( process.cwd() + '/component.json' );
-  } catch( error ) {
-    //fs.writeFileSync(process.cwd() + '/component.json', JSON.stringify( pkg, null, 2));
+      return;
+
+      upm.Package({
+
+      });
+
+      return;
+
+      upm.Builder({
+        prefix: config.prefix
+      });
+
+    });
+
+  program
+    .command( 'update' )
+    .description( 'Update repository, fetch dependencies and build.' )
+    .option( '-b, --branch <branch>', 'Fetch a specific branch. <branch>', 'master' )
+    .action( function update( config ) {
+      upm.debug( 'Updating component from the [%s] branch.', config.branch );
+
+    });
+
+  program
+    .command( 'commit' )
+    .description( 'Commit to repository.' )
+    .option( '-m, --message <message>', 'Set commit message. <message>', 'General update.' )
+    .action( function commit( config ) {
+      console.log( 'install!' );
+    });
+
+  program
+    .command( 'build' )
+    .description( 'Build.' )
+    .option('-s, --standalone <name>', 'build a stand-alone version of the component')
+    .option('-o, --out <dir>', 'output directory defaulting to ./build', 'build')
+    .option('-n, --name <file>', 'base name for build files defaulting to build', 'build')
+    .option('-p, --prefix <prefix>', 'prefix css asset urls with <prefix>')
+    .option('-c, --copy', 'copy files instead of linking')
+    .option('-u, --use <name>', 'use the given build plugin(s)')
+    .option('-R, --no-require', 'exclude require from build')
+    .action( function build( config ) {
+      console.log( 'build!' );
+    });
+
+  program
+    .command( 'provision' )
+    .description( 'Deploy to a server.' )
+    .option( '-m, --message <message>', 'Set commit message. <message>', 'General update.' )
+    .action( function build( config ) {
+      console.log( 'provision!' );
+    });
+
+
+  // Parse arguments
+  program.parse( process.argv );
+
+  // Render help if no arguments passed
+  if( process.argv.length === 2 ) {
+    program.outputHelp()
   }
-
-  program.name = 'thing';
-  program.out = 'your-mother';
-
-  setTimeout( function() {
-
-    var jsPath = path.join( program.out, program.name + '.js' );
-    var cssPath = path.join( program.out, program.name + '.css' );
-
-    console.log( 'building', jsPath );
-
-    var builder = new Builder( process.cwd() );
-
-    var start = new Date;
-
-    builder.build( function( err, obj ) {
-
-      if( err ) {
-        utils.fatal( err.message );
-      }
-      var js = '';
-      var css = obj.css.trim();
-
-      console.log( require( 'util' ).inspect( err || obj, { showHidden: true, colors: true, depth: 2 } ) )
-
-      if( obj.js.trim() ) {
-        var name = 'string' == typeof standalone ? standalone : conf.name;
-
-        if( standalone ) {
-          js += ';(function(){\n';
-        }
-        if( program.require ) {
-          js += obj.require;
-        }
-        js += obj.js;
-
-        if( standalone ) {
-          var umd = [
-            'if (typeof exports == "object") {', '  module.exports = require("' + conf.name + '");',
-            '} else if (typeof define == "function" && define.amd) {',
-            '  define(function(){ return require("' + conf.name + '"); });', '} else {',
-            '  this["' + name + '"] = require("' + conf.name + '");', '}'
-          ];
-
-          js += umd.join( '\n' );
-          js += '})();';
-        }
-      }
-
-      // css
-      if( css ) {
-        fs.writeFile( cssPath, css );
-      }
-
-      // js
-      if( js ) {
-        fs.writeFile( jsPath, js );
-      }
-
-      var duration = new Date - start;
-
-      log( 'write', jsPath );
-      log( 'write', cssPath );
-
-      if( js ) {
-        log( 'js', (js.length / 1024 | 0) + 'kb' );
-      }
-      if( css ) {
-        log( 'css', (css.length / 1024 | 0) + 'kb' );
-      }
-
-      log( 'duration', duration + 'ms' );
-
-      console.log();
-
-    } );
-
-  }, 4000 )
 
 }
 
-// Instantiate.
-module.exports = new Interface;
+// Instantiate and export.
+Object.defineProperties( module.exports = new Interface, {
+  completer: {
+    value: function completer( line ) {
 
+      var completions = '.help .error .exit .quit .q'.split( ' ' )
+      var hits = completions.filter( function( c ) {
+        return c.indexOf( line ) == 0
+      } )
+
+      // show all completions if none found
+      return [hits.length ? hits : completions, line]
+
+    },
+    enumerable: true,
+    configurable: true
+  },
+  menu: {
+    value: function( args ) {
+
+    },
+    enumerable: true,
+    configurable: true
+  },
+  parse: {
+    value: function( args ) {
+
+      if( 'string' === typeof args ) {
+        args = args.split( ' ' );
+      }
+
+      return parser( args );
+
+    },
+    enumerable: true,
+    configurable: true
+  }
+});

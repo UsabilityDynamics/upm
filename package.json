@@ -21,8 +21,11 @@
   "bin": {
     "upm": "./bin/upm.js",
     "upm-build": "./bin/upm.js",
+    "upm-install": "./bin/upm.js",
     "upm-create": "./bin/upm.js",
-    "upm-provision": "./bin/upm.js"
+    "upm-provision": "./bin/upm.js",
+    "upm-update": "./bin/upm.js",
+    "upm-commit": "./bin/upm.js"
   },
   "repository": {
     "type": "git",
@@ -35,8 +38,13 @@
   },
   "main": "./lib/upm.js",
   "dependencies": {
+    "uglify-js": "~2.3.6",
+    "component-markdown": "*",
+    "component-less": "*",
+    "component-jade": "*",
+    "component-uglifyjs": "*",
     "recess": "*",
-    "commander": "1.0.5",
+    "commander": "*",
     "mkdirp": "0.3.4",
     "superagent": "0.15.3",
     "component-builder": "*",
