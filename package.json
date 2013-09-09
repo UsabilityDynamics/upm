@@ -1,6 +1,6 @@
 {
   "name": "upm",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A package manager for the people.",
   "keywords": [ "package", "build" ],
   "license": "MIT",
@@ -20,11 +20,9 @@
   ],
   "bin": {
     "upm": "./bin/upm.js",
-    "upm-build": "./bin/upm.js",
     "upm-install": "./bin/upm.js",
     "upm-create": "./bin/upm.js",
     "upm-provision": "./bin/upm.js",
-    "upm-update": "./bin/upm.js",
     "upm-commit": "./bin/upm.js"
   },
   "repository": {
@@ -38,16 +36,15 @@
   },
   "main": "./lib/upm.js",
   "dependencies": {
+    "clean-css": "*",
+    "colors": "*",
     "winston": "*",
-    "uglify-js": "~2.3.6",
-    "component-markdown": "*",
-    "component-less": "*",
-    "component-jade": "*",
     "component-uglifyjs": "*",
+    "uglify-js": "*",
     "recess": "*",
     "commander": "*",
     "mkdirp": "0.3.4",
-    "superagent": "0.15.3",
+    "superagent": "*",
     "component-builder": "*",
     "string-to-js": "*",
     "jog": "0.4.0",

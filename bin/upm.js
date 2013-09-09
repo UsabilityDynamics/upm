@@ -7,7 +7,6 @@
  *    upm-install
  *    upm-update
  *    upm-commit
- *    upm-build
  *    upm-provision
  *
  * @example
@@ -42,14 +41,13 @@
 function cli() {
 
   // Private Properties.
+  var self      = this;
   var upm       = require( '../' ).start();
   var commander = require( 'commander' ).Command;
   var extend    = require( 'extend' );
   var basename  = require( 'path' ).basename;
-  var logger    = require( 'winston' );
   var program   = new commander( 'upm' );
 
-  // Handle dashed-commands.
   if( process.argv.length === 2 && basename( process.argv[1] ) != 'upm' ) {
     // process.argv[1] = process.argv[1].replace( '-', ' ' );
   }
@@ -62,6 +60,7 @@ function cli() {
     .command( 'create' )
     .description( 'Create new project.' )
     .option( '-n, --name <name>', 'Component name.', 'new-project' )
+    .option( '-d, --destination <dest>', 'Component output directory.', 'vendor' )
     .option( '-r, --repository <repository>', 'Path to GitHub repository.', 'UsabilityDynamics/new-project' )
     .option( '-t, --type <type>', 'Type of project.', 'library' )
     .option( '-v, --version <version>', 'Component version.', '0.0.1' )
@@ -71,66 +70,80 @@ function cli() {
       // Load component.json
       var project = new upm.Project({
         name: config.name,
-        version: config.version,
         type: config.type,
+        version: config.version,
         repository: {
           type: 'git',
           url: [ 'https://github.com', config.repository ].join( '/' )
         }
       });
 
+      // Relay messages to console.
+      project.on( 'message', self.log );
+      project.on( 'error', self.error );
+
       if( !project.is_valid ) {
         return logger.error( 'Could not create project.' );
       }
 
-      project.create()
+      project.create();
+
+      project.once( 'created', function created( error, data ) {
+
+      });
 
     });
 
   program
     .command( 'install' )
-    .description( 'Install component dependencies.' )
-    .option( '-o, --out <dir>', 'output directory defaulting to ./build', 'build' )
+    .usage( '[name] [options]' )
+    .description( 'Install or update component dependencies and compile.' )
+    .option( '-d, --destination <dest>', 'Component output directory.', 'vendor' )
+    .option( '-o, --out <dir>', 'Output directory for compiled results.', 'build' )
     .option( '-n, --name <file>', 'base name for build files defaulting to build', 'build' )
-    .option( '-b, --branch <branch>', 'install from branch', 'master' )
-    .option( '-p, --prefix <prefix>', 'prefix css asset urls with <prefix>')
+    .option( '-b, --branch <branch>', 'branch name', 'master' )
     .action( function install( config ) {
-      logger.info( 'Installing component dependancies from the [%s] branch.', config.branch );
+      self.log( 'Installing component dependancies from the [%s] branch.', config.branch );
 
-      // Load component.json
+      // Load project instance.
       var project = new upm.Project();
+
+      // Relay messages to console.
+      project.on( 'message', self.log );
+      project.on( 'error', self.error );
 
       // Project is broken.
       if( !project.is_valid ) {
-        return logger.error( 'Unable to run install or an invalid project.' );
+        return self.error( 'Unable to run install; verify that component.json is valid.' );
       }
 
-      // No dependencies to update.
-      if( !project.have_dependencies ) {
-        return logger.info( 'No dependencies to update.')
-      }
+      // Run update if needed.
+      project.update();
 
-      // Run the udpate.
-      project.update({
-        force: true
+      // Project dependencies updated.
+      project.once( 'updated', function updated() {
+
+        var builder = upm.Builder({
+          prefix: config.prefix,
+          require: false
+        });
+
+        // Relay messages to console.
+        builder.on( 'message', self.log );
+        builder.on( 'error', self.error );
+
+        // Built Complete.
+        builder.on( 'built', function( error ) {
+
+          if( error ) {
+            self.error( 'Built of [%s] project is failed: %s.', builder.config.name, error.message );
+          } else {
+            self.log( 'Built of [%s] project is complete.', builder.config.name );
+          }
+
+        })
+
       });
-
-      // logger.info( 'Installing component dependancies from the [%s] branch.', config.branch );
-
-      return;
-
-      upm.Builder({
-        prefix: config.prefix
-      });
-
-    });
-
-  program
-    .command( 'update' )
-    .description( 'Update repository, fetch dependencies and build.' )
-    .option( '-b, --branch <branch>', 'Fetch a specific branch. <branch>', 'master' )
-    .action( function update( config ) {
-      upm.debug( 'Updating component from the [%s] branch.', config.branch );
 
     });
 
@@ -140,27 +153,6 @@ function cli() {
     .option( '-m, --message <message>', 'Set commit message. <message>', 'General update.' )
     .action( function commit( config ) {
       console.log( 'install!' );
-    });
-
-  program
-    .command( 'build' )
-    .description( 'Compile components.' )
-    .option( '-o, --out <dir>', 'output directory defaulting to ./build', 'build' )
-    .option( '-n, --name <file>', 'base name for build files defaulting to build', 'build ' )
-    .option( '-p, --prefix <prefix>', 'prefix css asset urls with <prefix>')
-    .option( '-u, --use <name>', 'use the given build plugin(s)')
-    .action( function build( config ) {
-      upm.debug( 'Building the [%s] branch.', config.branch );
-
-      var _builder = upm.Builder({
-        prefix: config.prefix,
-        require: false
-      });
-
-      _builder.on( 'complete', function() {
-        console.log( 'Build comlete.' );
-      });
-
     });
 
   program
@@ -180,6 +172,68 @@ function cli() {
   program.parse( process.argv );
 
 }
+
+Object.defineProperties( cli.prototype, {
+  table: {
+    /**
+     * Console Output with a Table
+     *
+     * @example
+     *    this.table( { data: 'here' } )
+     *
+     */
+    value: function table( data ) {
+      var table = new ( require( 'cli-table' ) );
+      table.push( data );
+      console.log( table.toString() );
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true
+  },
+  log: {
+    /**
+     * Console Output
+     *
+     * @example
+     *      this.log( 'Blah' )
+     *
+     * @param type
+     * @param message
+     * @param color
+     */
+    value: function log() {
+      console.log( '  \u001b[36m' + require( 'util' ).format.apply( require( 'util' ), arguments ) + '\u001b[39m' );
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true
+  },
+  error: {
+    /**
+     * Error Output
+     *
+     */
+    value: function error() {
+      console.log( '  \u001b[31mError: ' + require( 'util' ).format.apply( require( 'util' ), arguments ) + '\u001b[39m' );
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true
+  },
+  notice: {
+    /**
+     * Notice Output
+     *
+     */
+    value: function notice() {
+      console.log( '  \u001b[32mNotice: ' + require( 'util' ).format.apply( require( 'util' ), arguments ) + '\u001b[39m' );
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true
+  },
+})
 
 // Instantiate and export.
 Object.defineProperties( module.exports = new cli, {

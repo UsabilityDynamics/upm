@@ -1,28 +1,29 @@
-UDX is a CLI client for working with modules and packages that span accross multiple super projects most with their own repositories. 
+Forces the package to be installed into the given subdirectory path.
+This is used for autoloading PSR-0 packages that do not contain their full path. Use forward slashes for cross-platform compatibility.
+
+UPM is a CLI client for working with modules and packages that span accross multiple super projects most with their own repositories. 
 
  * Integrate and reuse Packages within other projects.
  * Packages should be free to move around yet still stay in synchronization with their own repository.
- * UDX prevents multiple instance of a Package from falling out of synchronization.
- * UDX can be used to create a new Package, define and download dependancies, generate a build and push back to own repository without any conflict from the super repository.
-
+ * UPM prevents multiple instance of a Package from falling out of synchronization.
+ * UPM can be used to create a new Package, define and download dependancies, generate a build and push back to own repository without any conflict from the super repository.
 
   "As soon as you have a composer.json in a directory, that directory is a package.
   When you add a require to a project, you are making a package that depends on other packages.
   The only difference between your project and libraries is that your project is a package without a name."
-  
 
 ## Usage
 The follow are abstracted CLI commands that are repository/platform independent.
 All CLI commands always execute in the current working directory.
 
-  udx-init             initialize a new package.json file, makefile and other scaffolding
-  udx-update           updates dependancies of
-  udx-install          install a new dependancy or update all existing dependancies
-  udx-build            compile the package and prepare for distribution
-  udx-deploy           deploy code to a web server
-  udx-sync             attempts to sync up all instances of the package with their repository
-  udx-push             commit package to repository
-  udx-pull             pull package from repository
+  upm-init             initialize a new package.json file, makefile and other scaffolding
+  upm-update           updates dependancies of
+  upm-install          install a new dependancy or update all existing dependancies
+  upm-build            compile the package and prepare for distribution
+  upm-deploy           deploy code to a web server
+  upm-sync             attempts to sync up all instances of the package with their repository
+  upm-push             commit package to repository
+  upm-pull             pull package from repository
 
 ## Supported Repositories and Dependency Managers
 
@@ -32,10 +33,10 @@ Composer works with Packagist.org, GitHub, SVN as well as with ZIP, Tar and text
 Packagist must all loaded into the same directory (usually called Vendor).
 
 ### NPM
-The Node.js repository is supported inherently since udx is a Node.js module.
+The Node.js repository is supported inherently since upm is a Node.js module.
 
 ### Git & SVN
-UDX recognizes when working within a Git or SVN repository and will commit code to either one.
+UPM recognizes when working within a Git or SVN repository and will commit code to either one.
 
 ### Composer
 Composer is a tool for dependency management in PHP that uses Packagist as well as others.
@@ -48,6 +49,13 @@ Component will handle combining scripts and styles and fixing URLs.
 ## Coming Later
  - Bower
  - WordPress.org
+
+## Changelog
+
+### 0.0.3
+ - Added native support for views, schemas and libs (PHP files).
+ - Added dedicated JS, LESS, CSS and PHP build handlers.
+ - Added compile support to mimick Composer.js structure.
 
 ## License
 
