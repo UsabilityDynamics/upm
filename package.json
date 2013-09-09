@@ -20,10 +20,11 @@
   ],
   "bin": {
     "upm": "./bin/upm.js",
-    "upm-install": "./bin/upm.js",
     "upm-create": "./bin/upm.js",
-    "upm-provision": "./bin/upm.js",
-    "upm-commit": "./bin/upm.js"
+    "upm-install": "./bin/upm.js",
+    "upm-deploy": "./bin/upm.js",
+    "upm-push": "./bin/upm.js",
+    "upm-pull": "./bin/upm.js"
   },
   "repository": {
     "type": "git",
@@ -36,15 +37,19 @@
   },
   "main": "./lib/upm.js",
   "dependencies": {
-    "clean-css": "*",
-    "colors": "*",
-    "winston": "*",
-    "component-uglifyjs": "*",
+    "yuicompressor": "*",
     "uglify-js": "*",
     "recess": "*",
+    "extend": "*",
+    "object-emitter": "*",
+    "object-settings": "*",
+    "async": "*",
+    "auto": "*",
+    "winston": "*",
     "commander": "*",
     "mkdirp": "0.3.4",
     "superagent": "*",
+    "component": "*",
     "component-builder": "*",
     "string-to-js": "*",
     "jog": "0.4.0",
@@ -66,17 +71,11 @@
     "rodent": "*",
     "optimist": "*",
     "semver": "*",
-    "component": "*",
-    "async": "*",
-    "auto": "*",
     "request": "*",
     "colors": "*",
     "mustache": "*",
     "wrench": "*",
-    "prompt": "*",
-    "extend": "*",
-    "object-emitter": "*",
-    "object-settings": "*"
+    "prompt": "*"
   },
   "engines": {
     "node": ">=0.6",
