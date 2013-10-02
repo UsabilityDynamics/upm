@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Usability Dynamics Package Manager (UPM)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="styles/app.css" rel="stylesheet">
+</head>
+<body>
+
+  <div style="position: absolute; left: 10px; right: 10px; top: 10px; bottom: 10px;">
+    <div class="well" style="float: left; width: 160px; padding: 8px;">
+      <ul class="nav nav-list">
+        <li class="nav-header">Favorites</li>
+        <li class="active"><a href="#"><i class="icon-white icon-home"></i> Home</a></li>
+        <li><a href="#"><i class="icon-book"></i> Documents</a></li>
+        <li><a href="#"><i class="icon-picture"></i> Pictures</a></li>
+        <li class="nav-header">Network</li>
+        <li class="divider"></li>
+        <li><a href="#"><i class="icon-flag"></i> About</a></li>
+      </ul>
+    </div>
+
+    <div style="float: left; position: absolute; left: 210px; right: 0; top: 0; bottom: 50px">
+      <div class="row">
+        <ul id="addressbar" class="breadcrumb"></ul>
+      </div>
+      <div class="row" style="background: #FFF; -webkit-border-radius: 2px; margin: -5px 1px 0 -19px; height: 100%; overflow: auto">
+        <ul style="margin: 5px;" id="files"></ul>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.1.0/lodash.min.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js"></script>
+  <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout-bootstrap/0.2.1/knockout-bootstrap.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.3.5/knockout.mapping.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/webfont/1.4.10/webfont.js"></script>
+  <script type="text/javascript" src="scripts/require.js"></script>
+  <script type="text/javascript" src="scripts/app.js"></script>
+</body>
+</html>

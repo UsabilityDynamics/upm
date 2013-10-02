@@ -32,32 +32,22 @@
  *    // Deploy to production environment.
  *    upm provision -e production
  *
- *    // Show debug messages.
- *    DEBUG=upm* upm install
- *
  * @todo Determine filename by getting basename of argv[1]
  * @constructor
  */
 function cli() {
 
   // Private Properties.
-  var self      = this;
-  var upm       = require( '../' ).start();
+  var upm = require( '../lib/upm' ).start();
   var commander = require( 'commander' ).Command;
-  var extend    = require( 'extend' );
-  var basename  = require( 'path' ).basename;
-  var program   = new commander( 'upm' );
+  var program = new commander( 'upm' );
+  var basename = require( 'path' ).basename;
+  var join = require( 'path' ).join;
+  var self = this;
 
-  if( process.argv.length === 2 && basename( process.argv[1] ) != 'upm' ) {
-    // process.argv[1] = process.argv[1].replace( '-', ' ' );
-  }
+  program.usage( '[command] [options]' ).version( upm.get( 'version' ) )
 
-  program
-    .usage( '[command] [options]' )
-    .version( upm.get( 'package' ).version )
-
-  program
-    .command( 'create' )
+  program.command( 'create' )
     .description( 'Create new project.' )
     .option( '-n, --name <name>', 'Component name.', 'new-project' )
     .option( '-d, --destination <dest>', 'Component output directory.', 'vendor' )
@@ -65,37 +55,38 @@ function cli() {
     .option( '-t, --type <type>', 'Type of project.', 'library' )
     .option( '-v, --version <version>', 'Component version.', '0.0.1' )
     .action( function create( config ) {
-      logger.info( 'Creating a [%s] project called [%s].', config.type, config.name );
 
-      // Load component.json
-      var project = new upm.Project({
-        name: config.name,
-        type: config.type,
-        version: config.version,
-        repository: {
-          type: 'git',
-          url: [ 'https://github.com', config.repository ].join( '/' )
-        }
-      });
-
-      // Relay messages to console.
-      project.on( 'message', self.log );
-      project.on( 'error', self.error );
-
-      if( !project.is_valid ) {
-        return logger.error( 'Could not create project.' );
+    // Load component.json
+    var project = new upm.Project( {
+      name: config.name,
+      type: config.type,
+      version: config.version,
+      repository: {
+        type: 'git',
+        url: [ 'https://github.com', config.repository ].join( '/' )
       }
+    } );
 
-      project.create();
+    // Relay messages to console.
+    project.on( 'debug', self.verbose );
+    project.on( 'verbose', self.verbose );
+    project.on( 'message', self.log );
+    project.on( 'error', self.error );
 
-      project.once( 'created', function created( error, data ) {
+    if( !project.is_valid ) {
+      return logger.error( 'Could not create project.' );
+    }
 
-      });
+    project.create();
 
-    });
+    project.once( 'created', function created( error, data ) {
 
-  program
-    .command( 'install' )
+    } );
+
+  } );
+
+  // Install Project.
+  program.command( 'install' )
     .usage( '[name] [options]' )
     .description( 'Install or update component dependencies and compile.' )
     .option( '-d, --destination <dest>', 'Component output directory.', 'vendor' )
@@ -103,69 +94,108 @@ function cli() {
     .option( '-n, --name <file>', 'base name for build files defaulting to build', 'build' )
     .option( '-b, --branch <branch>', 'branch name', 'master' )
     .action( function install( config ) {
-      self.log( 'Installing component dependancies from the [%s] branch.', config.branch );
 
-      // Load project instance.
-      var project = new upm.Project();
+    // Load project in curring working directory.
+    var project = new upm.Project( process.cwd() );
+
+    // Relay messages to console.
+    project.on( 'debug', self.verbose );
+    project.on( 'verbose', self.verbose );
+    project.on( 'message', self.log );
+    project.on( 'error', self.error );
+
+    // Project is broken.
+    if( !project.is_valid ) {
+      return self.error( 'Unable to run install; verify that component.json is valid.' );
+    }
+
+    // Trigger update.
+    project.update();
+
+    // Project dependencies updated.
+    project.once( 'updated', function updated( error ) {
+
+      var builder = upm.Builder( {
+        prefix: config.prefix,
+        require: false
+      } );
 
       // Relay messages to console.
-      project.on( 'message', self.log );
-      project.on( 'error', self.error );
+      builder.on( 'debug', self.verbose );
+      builder.on( 'verbose', self.verbose );
+      builder.on( 'message', self.log );
+      builder.on( 'error', self.error );
 
-      // Project is broken.
-      if( !project.is_valid ) {
-        return self.error( 'Unable to run install; verify that component.json is valid.' );
-      }
+      // Built Complete.
+      builder.once( 'built', function( error ) {
 
-      // Run update if needed.
-      project.update();
+        if( error ) {
+          self.error( 'Built of [%s] project is failed: %s.', builder.config.name, error.message );
+        } else {
+          self.log( 'Built of [%s] project is complete.', builder.config.name );
+        }
 
-      // Project dependencies updated.
-      project.once( 'updated', function updated() {
+      } )
 
-        var builder = upm.Builder({
-          prefix: config.prefix,
-          require: false
-        });
+    } );
 
-        // Relay messages to console.
-        builder.on( 'message', self.log );
-        builder.on( 'error', self.error );
+  } );
 
-        // Built Complete.
-        builder.on( 'built', function( error ) {
+  // Compile Project
+  program.command( 'compile' )
+    .usage( '[name] [options]' )
+    .description( 'Compile component.' )
+    .option( '-o, --out <dir>', 'Output directory for compiled results.', 'build' )
+    .option( '-n, --name <file>', 'base name for build files defaulting to build', 'build' )
+    .action( function install( config ) {
 
-          if( error ) {
-            self.error( 'Built of [%s] project is failed: %s.', builder.config.name, error.message );
-          } else {
-            self.log( 'Built of [%s] project is complete.', builder.config.name );
-          }
+    var builder = new upm.Builder;
 
-        })
+    // Relay messages to console.
+    builder.on( 'debug', self.verbose );
+    builder.on( 'verbose', self.verbose );
+    builder.on( 'message', self.log );
+    builder.on( 'error', self.error );
 
-      });
+    // Built Complete.
+    builder.once( 'built', function( error ) {
+      self.log( 'Done with comiping [%s] project.', builder.config.name );
+    } );
 
-    });
+  } );
 
-  program
-    .command( 'commit' )
+  // Commit Project.
+  program.command( 'commit' )
     .description( 'Commit to repository.' )
     .option( '-m, --message <message>', 'Set commit message. <message>', 'General update.' )
     .action( function commit( config ) {
-      console.log( 'install!' );
-    });
+    self.log( 'Commit feature under development' );
+  } );
 
-  program
-    .command( 'provision' )
+  // Provision Project.
+  program.command( 'provision' )
     .description( 'Deploy to a server.' )
     .option( '-m, --message <message>', 'Set commit message. <message>', 'General update.' )
     .action( function build( config ) {
-      console.log( 'provision!' );
+    self.log( 'Provision feature under development' );
+  });
+
+  // Start App.
+  program.command( 'start' )
+    .description( 'Start UPM Application.' )
+    .option( '-m, --message <message>', 'Set commit message. <message>', 'General update.' )
+    .action( function build( config ) {
+      self.client.call( upm );
     });
+
+  // UPM App Shortcut
+  if( basename( process.argv[1] ) === 'upm-app' ) {
+    return self.client.call( upm );
+  }
 
   // Render help if no arguments passed
   if( process.argv.length === 2 ) {
-    program.outputHelp()
+    return program.outputHelp();
   }
 
   // Parse arguments
@@ -173,7 +203,39 @@ function cli() {
 
 }
 
+/**
+ * Instance Properties.
+ *
+ */
 Object.defineProperties( cli.prototype, {
+  client: {
+    value: function client() {
+
+      var spawn = require( 'win-spawn' );
+
+      this.client = spawn( 'open', [ '-n', '-a', this.get( 'paths.webkit' ), this.get( 'paths.root' ) ], {
+        env: process.env,
+        detached: false
+      });
+
+      this.client.stdout.on( 'data', function( data ) {
+        // console.log( 'UPM Daemon', data );
+      });
+
+      this.client.stderr.on( 'data', function( data ) {
+        // console.log( 'UPM Daemon', data );
+      });
+
+      this.client.on( 'close', function( code ) {
+        // console.log( 'UPM Daemon Closed' );
+      });
+
+      this.client.on( 'close', function( code ) {
+        // console.log( 'UPM Daemon Closed' );
+      });
+
+    }
+  },
   table: {
     /**
      * Console Output with a Table
@@ -203,6 +265,24 @@ Object.defineProperties( cli.prototype, {
      * @param color
      */
     value: function log() {
+      console.log( '  \u001b[32m' + require( 'util' ).format.apply( require( 'util' ), arguments ) + '\u001b[39m' );
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true
+  },
+  verbose: {
+    /**
+     * Verbose Console Output
+     *
+     * @example
+     *      this.verbose( 'Blah' )
+     *
+     * @param type
+     * @param message
+     * @param color
+     */
+    value: function verbose() {
       console.log( '  \u001b[36m' + require( 'util' ).format.apply( require( 'util' ), arguments ) + '\u001b[39m' );
     },
     enumerable: true,
@@ -233,9 +313,29 @@ Object.defineProperties( cli.prototype, {
     configurable: true,
     writable: true
   },
+  parse: {
+    /**
+     * Parse Arguments
+     *
+     */
+    value: function parse() {
+      var basename = require( 'path' ).basename;
+
+      if( process.argv.length === 2 && basename( process.argv[1] ) != 'upm' ) {
+        // process.argv[1] = process.argv[1].replace( '-', ' ' );
+      }
+
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true
+  }
 })
 
-// Instantiate and export.
+/**
+ * Constructor Properties.
+ *
+ */
 Object.defineProperties( module.exports = new cli, {
   print: {
     value: function print() {
@@ -279,4 +379,4 @@ Object.defineProperties( module.exports = new cli, {
     enumerable: true,
     configurable: true
   }
-});
+} );

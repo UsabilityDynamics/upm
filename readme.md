@@ -1,13 +1,16 @@
+## Overview
 UPM is a CLI client for working with modules and packages that span accross multiple super projects most with their own repositories.
 
- * Integrate and reuse Packages within other projects.
- * Packages should be free to move around yet still stay in synchronization with their own repository.
+ * UPM is a Node.js command-line tool for rapidly building applications via the use of modular "Components"
+ * UPM can compile LESS, minify CSS, optimize and compress JavaScript, import and auto-load PHP libraries, manage fonts, views and maintain Git/SVN repository integrity.
+ * UPM can manage application and web service deployment and remote control via SSH.
+ * UPM is based on Component.js, Composer.js and NPM and supports all three data packages.
+ * UPM allows modular packages to freely move around different projects yet still stay in synchronization with their own repository.
  * UPM prevents multiple instance of a Package from falling out of synchronization.
- * UPM can be used to create a new Package, define and download dependancies, generate a build and push back to own repository without any conflict from the super repository.
 
 ## Usage
-The follow are abstracted CLI commands that are repository/platform independent.
-All CLI commands always execute in the current working directory.
+UPM is intended primarily for internal usage but is available to everybody.
+All CLI commands always execute in the current working directory where the target project is expected to be.
 
   upm create           initialize a new package.json file, makefile and other scaffolding
   upm update           install or update dependancies and compile/build addets
@@ -16,22 +19,13 @@ All CLI commands always execute in the current working directory.
   upm push             commit package to repository
   upm pull             pull package from repository
 
-## Supported Repositories and Dependency Managers
-
-### Used Compiler Libraries
+## Compilation Libraries
 UPM utlizes third-party libraries for compiling different files.
 
   * [Recess](https://github.com/twitter/recess) - LESS compiler developed by Twitter.
   * [UglifyJS 2](https://github.com/mishoo/UglifyJS2) - JavaScript compressor.
   * [YUI Compressor](https://github.com/yui/yuicompressor) - Yahoo! CSS compressor.
   * PHP libraries are not compiled but organized in a way that supports autoloading PSR-0 packages.
-
-## Changelog
-
-### 0.0.3
- - Added native support for views, schemas and libs (PHP files).
- - Added dedicated JS, LESS, CSS and PHP build handlers.
- - Added compile support to mimick Composer.js structure.
 
 ## License
 

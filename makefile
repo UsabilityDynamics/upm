@@ -5,6 +5,9 @@ HTML_FILE = static/coverage.html
 
 test-all: clean document lib-cov test-code
 
+webkit:
+	zip bin/app.nw views/index.html package.json
+
 document:
 	yuidoc -q --configfile static/yuidoc.json
   
