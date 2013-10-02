@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>lib/builder/builder.js - udx</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="http://a3d72a45d111006ec192-ec5b80a12b0b09b4d52373336afb4254.r80.cf1.rackcdn.com/usability-dynamics.png" title="udx"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Project.html">Project</a></li>
+            
+                <li><a href="../classes/upm.html">upm</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/UPM.html">UPM</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: lib/builder/builder.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * Compiles components and outputs built files into target directories.
+ *
+ *
+ *    builder.addLookup( &#x27;lib&#x27; );
+ *    builder.addFile(&#x27;scripts&#x27;, &#x27;view.js&#x27;, &#x27;compiled view js&#x27;);
+ *    builder.prefixUrls( options.prefix );
+ *    builder.copyAssetsTo( options.out );
+ *
+ */
+function Builder( options ) {
+
+  if( !(this instanceof Builder ) ) {
+    return new Builder( options );
+  }
+
+  var resolve = require( &#x27;path&#x27; ).resolve;
+  var extend = require( &#x27;extend&#x27; );
+  var path = require( &#x27;path&#x27; );
+  var schema = require( &#x27;../../static/schemas/component.json&#x27; )
+
+  // Override Component Configuration
+  options = extend( {
+    directory: process.cwd(),
+    name: &#x27;build&#x27;,
+    out: &#x27;build&#x27;,
+    require: false,
+    prefix: null
+  }, options );
+
+  // Override Builder prototype.
+  Object.defineProperties( this.__super.prototype, {
+    json: {
+      value: Builder.prototype.json,
+      enumerable: true
+    },
+    buildLibs: {
+      value: Builder.prototype.buildLibs,
+      enumerable: true
+    },
+    buildSchemas: {
+      value: Builder.prototype.buildSchemas,
+      enumerable: true
+    },
+    buildAsset: {
+      value: Builder.prototype.buildAsset,
+      enumerable: true
+    },
+    build: {
+      value: Builder.prototype.build,
+      enumerable: true
+    },
+  } );
+
+  // Create builder instance.
+  var builder = new this.__super( options.directory );
+
+  // Mixing better EventEmitter.
+  require( &#x27;object-emitter&#x27; ).mixin( builder );
+
+  // Add Type Support
+  extend( builder, {
+    lookupPaths: builder.lookupPaths || [],
+    assetsDest: builder.assetsDest || resolve( &#x27;./temp&#x27; ),
+    ignored: {
+      scripts: [],
+      styles: [],
+      files: [],
+      images: [],
+      fonts: [],
+      templates: [],
+      libs: [],
+      schemas: []
+    }
+  });
+
+  console.log( require( &#x27;util&#x27; ).inspect( builder, { showHidden: false, colors: true, depth: 2 } ) )
+
+    // Set config defaults.
+  extend( builder.config, {
+    config: {
+      &quot;out&quot;: &quot;./components&quot;,
+      namespace: builder.config.config &amp;&amp; builder.config.config[&#x27;namespace&#x27;] ? builder.config.config[&#x27;namespace&#x27;] : Builder.utility.get_namespace( builder.config ),
+      basename: &quot;build&quot;
+    },
+    build: {
+      libs: {
+        out: &quot;./build/vendor&quot;,
+        settings: {
+          &quot;autoload&quot;: true
+        }
+      },
+      schemas: {
+        out: &quot;./build/schemas&quot;,
+        settings: {}
+      },
+      scripts: {
+        out: &quot;./build/scripts&quot;,
+        settings: {
+          &quot;minify&quot;: true
+        }
+      },
+      styles: {
+        out: &quot;./build/styles&quot;,
+        settings: {
+          &quot;minify&quot;: true
+        }
+      },
+      templates: {
+        out: &quot;./build/templates&quot;,
+        settings: {}
+      }
+    }
+  } );
+
+  process.nextTick( function() {
+    builder.emit( &#x27;message&#x27;, &#x27;Starting to compile [%s] project.&#x27;, builder.config.name );
+
+    builder.build( function( error, obj ) {
+
+      // Special Handlers
+      // builder.use( require( &#x27;./handlers/libs&#x27; ) );
+      // builder.use( require( &#x27;./handlers/scripts&#x27; ) );
+      // builder.use( require( &#x27;./handlers/schemas&#x27; ) );
+      // builder.use( require( &#x27;./handlers/fonts&#x27; ) );
+      // builder.use( require( &#x27;./handlers/styles&#x27; ) );
+
+      if( error ) {
+        return builder.emit( &#x27;error&#x27;, &#x27;Fatail error during [%s] build: [%s].&#x27;, builder.config.name, error.message );
+      } else {
+        builder.emit( &#x27;message&#x27;, &#x27;Build of [%s] complete.&#x27;, builder.config.name );
+      }
+
+    } );
+
+  });
+
+  return builder;
+
+}
+
+/**
+ * Instance Properties.
+ *
+ */
+Object.defineProperties( Builder.prototype, {
+  buildAsset: {
+    /**
+     * Build asset &#x60;type&#x60; and invoke &#x60;fn(err, paths)&#x60;.
+     *
+     * @param {String} type
+     * @param {Function} fn
+     * @api private
+     */
+    value: function buildAsset( type, fn ) {
+      var Batch = require( &#x27;batch&#x27; );
+      var self = this;
+      var conf = this.config;
+      var batch = new Batch;
+
+      function normalize( name ) {
+        return name.replace( &#x27;/&#x27;, &#x27;-&#x27; );
+      }
+
+      // self.emit( &#x27;message&#x27;, &#x27;Prepare asset [%s] for building.&#x27;, type );
+
+      // Build dependencies.
+      if( self.hasDependencies() ) {
+
+        Object.keys( self.dependencies() ).forEach( function( dep ) {
+          dep = normalize( dep );
+
+          // ignored
+          if( self.ignoring( dep, type ) ) {
+            return self.emit( &#x27;ignoring %s&#x27;, dep );
+          }
+
+          // ignore it so we dont have dups
+          self.ignore( dep, type );
+
+          // lookup dep
+          batch.push( function( done ) {
+            self.lookup( dep, function( err, dir ) {
+              if( err ) {
+                return done( err );
+              }
+              var builder = new Builder( dir, self );
+              self.emit( &#x27;dependency&#x27;, builder );
+              builder.buildAsset( type, done );
+            } );
+          } );
+        } );
+      }
+
+      // copy assets
+      if( conf[type] ) {
+
+        conf[type].forEach( function( file ) {
+          var path = self.path( file );
+          var name = normalize( self.basename );
+          var dest = join( self.assetsDest, name, file );
+          batch.push( function( done ) {
+            self.copyTo( path, dest, done );
+          } );
+        } );
+      }
+
+      batch.end( function( err, res ) {
+
+        if( err ) {
+          return fn( err );
+        }
+        fn( null, res );
+      } );
+
+    },
+    enumerable: true
+  },
+  json: {
+    /**
+     * Return the configuration JSON.
+     *
+     * @return {Object}
+     * @api public
+     */
+    value: function json() {
+      var fs = require( &#x27;fs&#x27; );
+      var read = fs.readFileSync;
+      var path = this.path( &#x27;component.json&#x27; ) || this.path( &#x27;package.json&#x27; ) || this.path( &#x27;composer.json&#x27; );
+      var str = read( path, &#x27;utf8&#x27; );
+
+      try {
+        var obj = JSON.parse( str );
+      } catch( err ) {
+        err.message += &#x27; in &#x27; + path;
+        throw err;
+      }
+
+      if( obj.main ) {
+        obj.main = obj.main.replace( /^\.\//, &#x27;&#x27; );
+      }
+
+      return obj;
+
+    },
+    enumerable: true
+  },
+  buildLibs: {
+    /**
+     * buildLibs.
+     *
+     * @return {Object}
+     * @api public
+     */
+    value: function buildLibs( fn ) {
+      // Must use buildType and not buildAsset, don&#x27;t know why really
+      this.buildType( &#x27;libs&#x27;, fn );
+    },
+    enumerable: true
+  },
+  buildSchemas: {
+    /**
+     * buildSchemas.
+     *
+     * @return {Object}
+     * @api public
+     */
+    value: function buildSchemas( fn ) {
+      this.buildType( &#x27;schemas&#x27;, fn );
+    },
+    enumerable: true
+  },
+  build: {
+    /**
+     * Build and invoke &#x60;fn(err, res)&#x60;, where &#x60;res&#x60;
+     * is an object containing:
+     *
+     *  - &#x60;css&#x60;
+     *  - &#x60;js&#x60;
+     *  - &#x60;images&#x60;
+     *  - &#x60;fonts&#x60;
+     *  - &#x60;files&#x60;
+     *
+     * NOTE: Batch maintains result ordering (res.shift()s here)
+     *
+     * @param {Function} fn
+     * @api public
+     */
+    value: function build( fn ) {
+      // this.emit( &#x27;message&#x27;, &#x27;Building.&#x27; );
+
+      function empty( s ) {
+        return &#x27;&#x27; != s;
+      }
+
+      var builder = this;
+      var requirejs = require( &#x27;component-require&#x27; );
+      var Batch = require( &#x27;batch&#x27; );
+      var batch = new Batch;
+
+      batch.push( this.buildScripts.bind( this ) );
+      batch.push( this.buildTemplates.bind( this ) );
+      batch.push( this.buildAliases.bind( this ) );
+      //batch.push( this.buildLibs.bind( this ) );
+      batch.push( this.buildStyles.bind( this ) );
+      batch.push( this.buildImages.bind( this ) );
+      batch.push( this.buildFonts.bind( this ) );
+      batch.push( this.buildFiles.bind( this ) );
+
+      batch.end( function( err, res ) {
+
+        return console.log( &quot;\n------------\n&quot;, builder .config.name, res );
+
+        if( err ) {
+          return fn( err );
+        }
+
+        var scripts = res.shift();
+        var require = res.shift();
+        var templates = res.shift();
+        var custom = builder._js;
+
+        fn( null, {
+          js: [
+            scripts,
+            require,
+            templates,
+            custom
+          ].filter( empty ).join( &#x27;\n&#x27; ),
+          //libs: res.shift(),
+          css: res.shift(),
+          images: res.shift(),
+          fonts: res.shift(),
+          files: res.shift(),
+          require: requirejs
+        } );
+
+
+      } );
+
+    },
+    enumerable: true
+  },
+  __super: {
+    value: require( &#x27;component-builder&#x27; ),
+    enumerable: false
+  }
+} );
+
+/**
+ * Constructor Properties.
+ *
+ */
+Object.defineProperties( module.exports = Builder, {
+  upm: {
+    value: require( &#x27;../upm&#x27; ),
+    enumerable: false,
+    configurable: true
+  },
+  utility: {
+    value: require( &#x27;../utility&#x27; ),
+    enumerable: false,
+    configurable: true
+  }
+} );
+
+
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

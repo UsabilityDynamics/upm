@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>lib/upm.js - udx</title>
+    <title>lib/builder/handlers/schemas.js - udx</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -86,129 +86,18 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: lib/upm.js</h1>
+                        <h1 class="file-heading">File: lib/builder/handlers/schemas.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 /**
+ * Build Schemas
  *
+ * @param builder
  */
-require( &#x27;abstract&#x27; ).createModel( module.exports = function upm() {
+module.exports = function build( builder ) {
 
-  var join = require( &#x27;path&#x27; ).join;
-  var resolve = require( &#x27;path&#x27; ).resolve;
-
-  // Prototype properties.
-  upm.defineProperties( upm.prototype, {
-    Compiler: {
-      value: require( &#x27;./compiler/compiler&#x27; ),
-      configurable: true,
-      enumerable: true,
-      writable: true
-    },
-    Provision: {
-      value: require( &#x27;./provision/provision&#x27; ),
-      configurable: true,
-      enumerable: true,
-      writable: true
-    },
-    Project: {
-      value: require( &#x27;./project/project&#x27; ),
-      configurable: true,
-      enumerable: true,
-      writable: true
-    },
-    Builder: {
-      value: require( &#x27;./builder/builder&#x27; ),
-      configurable: true,
-      enumerable: true,
-      writable: true
-    },
-    Package: {
-      value: require( &#x27;./package/package&#x27; ),
-      configurable: true,
-      enumerable: true,
-      writable: true
-    },
-    Repository: {
-      value: require( &#x27;./repository/repository&#x27; ),
-      configurable: true,
-      enumerable: true,
-      writable: true
-    },
-    utility: {
-      value: require( &#x27;./utility&#x27; ),
-      enumerable: false,
-      configurable: true
-    },
-    debug: {
-      value: require( &#x27;debug&#x27; )( &#x27;upm&#x27; ),
-      enumerable: true,
-      configurable: true
-    }
-  } );
-
-  // Constructor properties.
-  upm.defineProperties( upm, {
-    Provision: {
-      get: upm.prototype.Provision,
-      enumerable: true
-    },
-    Project: {
-      get: upm.prototype.Project,
-      enumerable: true
-    },
-    Package: {
-      value: function( options ) {
-        return new upm.prototype.Package( options )
-      },
-      enumerable: true
-    },
-    Builder: {
-      get: upm.prototype.Builder,
-      enumerable: true
-    },
-    Repository: {
-      get: upm.prototype.Repository,
-      enumerable: true
-    },
-    utility: {
-      get: function() {
-        return upm.prototype.utility;
-      },
-      enumerable: false
-    },
-    debug: {
-      get: upm.prototype.debug,
-      enumerable: false
-    }
-  } );
-
-  // Define upm instance constructor
-  upm.defineConstructor( function start( settings ) {
-
-    // Add EventEmitter to instance.
-    require( &#x27;object-emitter&#x27; ).mixin( this );
-
-    // Compute Properties.
-    this.set({
-      name: require( &#x27;../package&#x27; ).name,
-      bin: require( &#x27;../package&#x27; ).bin,
-      version: require( &#x27;../package&#x27; ).version,
-      paths: {
-        cwd: process.cwd(),
-        root: resolve( process.cwd(), join( module.filename, &#x27;../../&#x27; ) ),
-        webkit: resolve( process.cwd(), join( module.filename, &#x27;../../bin/webkit.app&#x27; ) ),
-        cli: resolve( process.cwd(), join( module.filename, &#x27;../../bin/upm.js&#x27; ) ),
-        lib: resolve( process.cwd(), join( module.filename, &#x27;../../lib&#x27; ) ),
-        ux: resolve( process.cwd(), join( module.filename, &#x27;../../ux&#x27; ) )
-      }
-    });
-
-  });
-
-});
-
+}
 
     </pre>
 </div>

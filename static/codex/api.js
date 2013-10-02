@@ -1,7 +1,18 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
-    "classes": [],
-    "modules": [],
-    "allModules": []
+    "classes": [
+        "Project",
+        "upm"
+    ],
+    "modules": [
+        "UPM"
+    ],
+    "allModules": [
+        {
+            "displayName": "UPM",
+            "name": "UPM",
+            "description": "Helper Utility for UPM"
+        }
+    ]
 } };
 });

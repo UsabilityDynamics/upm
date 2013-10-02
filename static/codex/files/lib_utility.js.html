@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>lib/utility.js - udx</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="http://a3d72a45d111006ec192-ec5b80a12b0b09b4d52373336afb4254.r80.cf1.rackcdn.com/usability-dynamics.png" title="udx"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Project.html">Project</a></li>
+            
+                <li><a href="../classes/upm.html">upm</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/UPM.html">UPM</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: lib/utility.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * Helper Utility for UPM
+ *
+ * @for upm
+ * @module UPM
+ * @author potanin@UD
+ */
+function Utility() {
+  return Object.keys( arguments ) ? require( &#x27;lodash&#x27; ).pick.apply( null, [ Utility, Array.prototype.slice.call( arguments ) ] ) : Utility;
+}
+
+Object.defineProperties( module.exports = Utility, {
+  is_writable: {
+    /**
+     * Test if Target is Writable
+     *
+     * @param target
+     * @returns {*}
+     */
+    value: function is_writable( target ) {
+
+      var path = require( &#x27;path&#x27; );
+      var fs = require( &#x27;fs&#x27; );
+      var resolve = require( &#x27;path&#x27; ).resolve;
+      var exists = fs.existsSync;
+      var path = undefined;
+
+      try {
+
+        if( !target ) {
+          throw new Error;
+        }
+
+        path = resolve( target );
+
+        if( !exists( path ) ) {
+          throw new Error;
+        }
+
+        return path;
+
+      } catch( error ) {
+        return false;
+      }
+
+    },
+    enumerable: true
+  },
+  get_namespace: {
+    /**
+     * Get Namespace/Vendor name from repository
+     *
+     * @param repository
+     */
+    value: function get_namespace( config ) {
+      var url = require( &#x27;url&#x27; );
+      var parse = url.parse;
+      var pathname = undefined;
+      var parts = [];
+
+      if( config.repository.url ) {
+        var pathname = config.repository ? parse( config.repository.url.toLowerCase() ).pathname : config.repo.toLowerCase();
+        var parts = pathname.split( &#x27;/&#x27; );
+      }
+
+      if( parts.length === 3 ) {
+
+        return {
+          vendor: parts[1],
+          package: parts[2],
+          namespace: config.config[&#x27;namespace&#x27;] || parts[1]
+        };
+
+      }
+
+      if( parts.length === 2 ) {
+
+        return {
+          vendor: parts[0],
+          package: parts[1],
+          namespace: config.config[&#x27;namespace&#x27;] || parts[0]
+        };
+
+      }
+
+    },
+    enumerable: true
+  },
+  console: {
+    value: {
+
+      /**
+       * Output fatal error message and exit.
+       *
+       * @param {String} msg
+       * @api private
+       */
+      fatal: function() {
+        console.error();
+        Utility.console.error.apply( null, arguments );
+        console.error();
+        process.exit( 1 );
+      },
+
+      /**
+       * Log the given &#x60;type&#x60; with &#x60;msg&#x60;.
+       *
+       * @param {String} type
+       * @param {String} msg
+       * @api public
+       */
+      log: function( type, msg, color ) {
+        color = color || &#x27;36&#x27;;
+        var w = 10;
+        var len = Math.max( 0, w - type.length );
+        var pad = Array( len + 1 ).join( &#x27; &#x27; );
+        console.log( &#x27;  \033[&#x27; + color + &#x27;m%s\033[m : \033[90m%s\033[m&#x27;, pad + type, msg );
+      },
+
+      /**
+       * Log warning message with &#x60;type&#x60; and &#x60;msg&#x60;.
+       *
+       * @param {String} type
+       * @param {String} msg
+       * @api public
+       */
+      warn: function( type, msg ) {
+        Utility.console.log( type, msg, &#x27;33&#x27; );
+      },
+
+      /**
+       * Output error message.
+       *
+       * @param {String} msg
+       * @api private
+       */
+      error: function( msg ) {
+        var w = 10;
+        var type = &#x27;error&#x27;;
+        var len = Math.max( 0, w - type.length );
+        var pad = Array( len + 1 ).join( &#x27; &#x27; );
+        console.error( &#x27;  \033[31m%s\033[m : \033[90m%s\033[m&#x27;, pad + type, msg );
+      }
+
+    },
+    configurable: false,
+    enumerable: true,
+    writable: true
+  },
+  merge: {
+    /**
+     * Merge object b with object a.
+     *
+     * @example
+     *     var a = { foo: &#x27;bar&#x27; }
+     *       , b = { bar: &#x27;baz&#x27; };
+     *
+     *     utils.merge(a, b);
+     *     // =&gt; { foo: &#x27;bar&#x27;, bar: &#x27;baz&#x27; }
+     *
+     * @param {Object} a
+     * @param {Object} b
+     * @return {Object}
+     *
+     * @source connect
+     */
+    value: function merge( a, b ) {
+
+      if( a &amp;&amp; b ) {
+
+        for( var key in b ) {
+          a[key] = b[key];
+        }
+
+      }
+
+      return a;
+
+    },
+    configurable: false,
+    enumerable: true,
+    writable: true
+  },
+  resolve: {
+    /**
+     *
+     * @param target {String|Array}
+     * @returns {*}
+     */
+    value: function resolve( target ) {
+
+      var args = Array.prototype.slice.call( arguments );
+      var fs = require( &#x27;fs&#x27; );
+      var resolve = require( &#x27;path&#x27; ).resolve;
+      var exists = fs.existsSync;
+      var path = undefined;
+
+      if( args.length &gt; 1 ) {
+        target = args.join( require( &#x27;path&#x27; ).sep );
+      }
+
+      try {
+
+        if( !target ) {
+          throw new Error;
+        }
+
+        path = resolve( target );
+
+        if( !exists( path ) ) {
+          throw new Error;
+        }
+
+        return path;
+
+      } catch( error ) {
+        return false;
+      }
+
+    },
+    enumerable: true
+  },
+  normalize: {
+    value: function normalize( deps ) {
+
+      if( !deps || !Object.keys( deps ) ) {
+        return {}
+      }
+      return Object.keys( deps ).map( function( name ) {
+        return name + &#x27;@&#x27; + deps[name];
+      } );
+
+    },
+    enumerable: true
+  },
+} );
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

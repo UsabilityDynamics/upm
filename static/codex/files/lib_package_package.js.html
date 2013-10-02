@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>lib/package/package.js - udx</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="http://a3d72a45d111006ec192-ec5b80a12b0b09b4d52373336afb4254.r80.cf1.rackcdn.com/usability-dynamics.png" title="udx"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Project.html">Project</a></li>
+            
+                <li><a href="../classes/upm.html">upm</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/UPM.html">UPM</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: lib/package/package.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * Package Loader
+ *
+ * Loads a package from a repository and fetches all dependencies.
+ * All declared component files are put into the components directory.
+ *
+ * ## Events
+ * - file (file, url)
+ * - error (error)
+ * - end ()
+ * - dep (pkg)
+ * - exists (instance)
+ *
+ * options.dest Relative destination path for component storage.
+ *
+ */
+function Package( options ) {
+
+  if( !(this instanceof Package ) ) {
+    return new Package( options );
+  }
+
+  var self = this;
+  var extend = require( &#x27;extend&#x27; );
+  var path = require( &#x27;path&#x27; );
+  var fs = require( &#x27;fs&#x27; );
+  var exists = fs.existsSync || path.existsSync;
+
+  // Update composer.json with defaults.
+  options = extend( {
+    name: &#x27;new-component&#x27;,
+    version: &#x27;0.0.1&#x27;,
+    dest: &#x27;components&#x27;
+  }, options || {} );
+
+  extend( Package.__super.prototype, {
+    install: {
+      value: Package.prototype.install,
+      enumerable: true
+    },
+    reallyInstall: {
+      value: Package.prototype.reallyInstall,
+      enumerable: true
+    },
+    error: {
+      value: Package.prototype.error,
+      enumerable: true
+    },
+    getJSON: {
+      value: Package.prototype.getJSON,
+      enumerable: true
+    }
+  } );
+
+  var _package = new Package.__super( options.name, options.version, options );
+
+  require( &#x27;object-emitter&#x27; ).mixin( _package );
+  require( &#x27;object-settings&#x27; ).mixin( this );
+
+  // console.log( require( &#x27;util&#x27; ).inspect( _package, { showHidden: false, colors: true, depth: 2 } ) )
+
+  return _package;
+
+}
+
+/**
+ * Instance Properties.
+ *
+ */
+Object.defineProperties( Package.prototype, {
+  install: {
+    value: function install() {
+      var self = this;
+      var name = this.name;
+
+      if( !~name.indexOf( &#x27;/&#x27; ) ) {
+        //console.log( require( &#x27;util&#x27; ).inspect( this, { showHidden: true, colors: true, depth: 2 } ) )
+        //this.emit( &#x27;error&#x27;, new Error( &#x27;Invalid component name &quot;&#x27; + name + &#x27;&quot;&#x27; ) );
+        //return this;
+      }
+
+      this.getLocalJSON( function( err, json ) {
+        // console.log( &#x27;this.getLocalJSON&#x27;, err || json );
+
+        if( err &amp;&amp; err.code == &#x27;ENOENT&#x27; ) {
+          self.reallyInstall();
+        } else if( err ) {
+          self.emit( &#x27;error&#x27;, err );
+        } else if( !self.force ) {
+          self.emit( &#x27;exists&#x27;, self );
+        } else {
+          self.reallyInstall();
+        }
+
+      } );
+
+      // @chainable
+      return this;
+
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true
+  },
+  error: {
+    value: function error( res, url ) {
+      var http = require( &#x27;http&#x27; );
+      var https = require( &#x27;https&#x27; );
+
+      var name = http.STATUS_CODES[res.statusCode];
+      var err = new Error( &#x27;failed to fetch &#x27; + url + &#x27;, got &#x27; + res.statusCode + &#x27; &quot;&#x27; + name + &#x27;&quot;&#x27; );
+      err.status = res.statusCode;
+      return err;
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true
+  },
+  getJSON: {
+    value: function( fn ) {
+      var path = require( &#x27;path&#x27; );
+      var dirname = path.dirname;
+      var basename = path.basename;
+      var extname = path.extname;
+      var resolve = path.resolve;
+      var mkdir = require( &#x27;mkdirp&#x27; ).mkdirp;
+      var netrc = require( &#x27;netrc&#x27; );
+      var Batch = require( &#x27;batch&#x27; );
+      var url = require( &#x27;url&#x27; );
+      var parse = url.parse;
+      var fs = require( &#x27;fs&#x27; );
+      var rimraf = require( &#x27;rimraf&#x27; );
+      var http = require( &#x27;http&#x27; );
+      var https = require( &#x27;https&#x27; );
+      var request = require( &#x27;superagent&#x27; );
+
+      var self = this;
+
+      // @todo Should fallback to composer.json or package.json if not available.
+      var url = this.url( &#x27;component.json&#x27; );
+
+      var req = request.get( url );
+
+      req.set( &#x27;Accept-Encoding&#x27;, &#x27;gzip&#x27; );
+
+      // Add proxy
+      if( self.proxy ) {
+        req.proxy( self.proxy );
+      }
+
+      // authorize call
+      var netrc = self.netrc[parse( url ).hostname];
+
+      if( netrc ) {
+        req.auth( netrc.login, netrc.password );
+      }
+
+      req.end( function( res ) {
+
+        if( res.error ) {
+          return fn( self.error( res, url ) );
+        }
+
+        try {
+          var json = JSON.parse( res.text );
+        } catch( err ) {
+          err.message += &#x27; in &#x27; + url;
+          return fn( err );
+        }
+
+        fn( null, json );
+
+      } );
+
+      req.on( &#x27;error&#x27;, function( err ) {
+        if( &#x27;getaddrinfo&#x27; == err.syscall ) {
+          err.message = &#x27;dns lookup failed&#x27;;
+        }
+        fn( err );
+      } );
+
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true
+  },
+  dirname: {
+    /**
+     * Enforce Lowercase
+     *
+     * @returns {string}
+     */
+    value: function dirname() {
+      var resolve = path.resolve;
+      return resolve( this.dest, this.name.split( &#x27;/&#x27; ).join( &#x27;-&#x27; ) ).toLowerCase();
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true
+  },
+  reallyInstall: {
+    /**
+     * Really install the component.
+     *
+     * @api public
+     */
+    value: function reallyInstall() {
+      var path = require( &#x27;path&#x27; );
+      var dirname = path.dirname;
+      var basename = path.basename;
+      var extname = path.extname;
+      var resolve = path.resolve;
+      var mkdir = require( &#x27;mkdirp&#x27; ).mkdirp;
+      var netrc = require( &#x27;netrc&#x27; );
+      var Batch = require( &#x27;batch&#x27; );
+      var url = require( &#x27;url&#x27; );
+      var parse = url.parse;
+      var fs = require( &#x27;fs&#x27; );
+      var rimraf = require( &#x27;rimraf&#x27; );
+      var http = require( &#x27;http&#x27; );
+      var https = require( &#x27;https&#x27; );
+
+      // Single Package
+      var self = this;
+      var i = 0;
+      var batch;
+      var last;
+
+      next();
+
+      function next() {
+
+        self.remote = self.remotes[i++];
+
+        if( !self.remote ) {
+          return self.emit( &#x27;error&#x27;, new Error( &#x27;can not find remote for &quot;&#x27; + self.name + &#x27;&quot;, Remotes: &#x27; + self.remotes.join( &#x27;, &#x27; ) ) );
+        }
+
+        last = i == self.remotes.length;
+
+        self.remote = url.parse( self.remote );
+        self.remote.href = self.remote.href.slice( 0, -1 );
+
+        self.once( &#x27;error&#x27;, next );
+
+        // kick off installation
+        batch = new Batch;
+
+        self.getJSON( function( err, json ) {
+
+          if( err ) {
+            err.fatal = 404 != err.status || last;
+            return self.destroy( function( error ) {
+              if( error ) {
+                self.emit( &#x27;error&#x27;, error );
+              }
+              self.emit( &#x27;error&#x27;, err );
+            } );
+          }
+
+          var files = [];
+
+          if( json.scripts ) {
+            files = files.concat( json.scripts );
+          }
+
+          if( json.styles ) {
+            files = files.concat( json.styles );
+          }
+
+          if( json.templates ) {
+            files = files.concat( json.templates );
+          }
+
+          if( json.views ) {
+            files = files.concat( json.views );
+          }
+
+          if( json.schemas ) {
+            files = files.concat( json.schemas );
+          }
+
+          if( json.files ) {
+            files = files.concat( json.files );
+          }
+
+          if( json.images ) {
+            files = files.concat( json.images );
+          }
+
+          if( json.libs ) {
+            files = files.concat( json.libs );
+          }
+
+          if( json.fonts ) {
+            files = files.concat( json.fonts );
+          }
+
+          if( json.main ) {
+            files = files.concat( json.main );
+          }
+
+          // Support for package.json repository format
+          if( json.repository &amp;&amp; !json.repo ) {
+            json.repo = parse( json.repository.url ).pathname;
+          }
+
+          // Get Dependencies.
+          if( json.dependencies ) {
+            batch.push( function( done ) {
+              self.getDependencies( json.dependencies, done );
+            } );
+          }
+
+          // Update compoent.json it seems.
+          batch.push( function( done ) {
+            self.mkdir( self.dirname(), function( err ) {
+              json = JSON.stringify( json, null, 2 );
+              self.writeFile( &#x27;component.json&#x27;, json, done );
+            } );
+          } );
+
+          // Do something with files?
+          batch.push( function( done ) {
+            self.mkdir( self.dirname(), function( err ) {
+              self.getFiles( files, done );
+            } );
+          } );
+
+          // Bail.
+          batch.end( function( err ) {
+            if( err ) {
+              err.fatal = last;
+              self.destroy( function( error ) {
+                if( error ) {
+                  self.emit( &#x27;error&#x27;, error );
+                }
+                self.emit( &#x27;error&#x27;, err );
+                self.emit( &#x27;end&#x27; );
+              } );
+            } else {
+              self.emit( &#x27;end&#x27; );
+            }
+          } );
+
+        } );
+      }
+
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true
+  }
+} );
+
+/**
+ * Constructor Properties.
+ *
+ */
+Object.defineProperties( module.exports = Package, {
+  Builder: {
+    value: require( &#x27;../builder/builder&#x27; ),
+    enumerable: true,
+    configurable: true
+  },
+  Project: {
+    value: require( &#x27;../project/project&#x27; ),
+    enumerable: true,
+    configurable: true
+  },
+  __super: {
+    value: require( &#x27;component/lib/Package&#x27; ),
+    enumerable: false
+  },
+  utility: {
+    value: require( &#x27;../utility&#x27; ),
+    enumerable: false,
+    configurable: true
+  },
+  logger: {
+    value: require( &#x27;winston&#x27; ),
+    writable: true,
+    enumerable: true,
+    configurable: true
+  }
+} )
+
+
+
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

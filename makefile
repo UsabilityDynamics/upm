@@ -27,7 +27,7 @@ test-cov: lib-cov
 	REPORTER=html-cov > $(HTML_FILE)
 
 lib-cov:
-	jscoverage lib $(LIB_COV)
+	jscoverage lib static/codex/lib-cov
 
 clean:
 	rm -fr static/lib-cov/*

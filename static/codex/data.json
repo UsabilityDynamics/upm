@@ -7,36 +7,122 @@
         "logo": "http://a3d72a45d111006ec192-ec5b80a12b0b09b4d52373336afb4254.r80.cf1.rackcdn.com/usability-dynamics.png"
     },
     "files": {
-        "lib/install/index.js": {
-            "name": "lib/install/index.js",
+        "lib/builder/handlers/fonts.js": {
+            "name": "lib/builder/handlers/fonts.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "lib/package/index.js": {
-            "name": "lib/package/index.js",
+        "lib/builder/handlers/libs.js": {
+            "name": "lib/builder/handlers/libs.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "lib/provision/index.js": {
-            "name": "lib/provision/index.js",
+        "lib/builder/handlers/schemas.js": {
+            "name": "lib/builder/handlers/schemas.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "lib/repository/index.js": {
-            "name": "lib/repository/index.js",
+        "lib/builder/handlers/scripts.js": {
+            "name": "lib/builder/handlers/scripts.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "lib/scaffold/index.js": {
-            "name": "lib/scaffold/index.js",
+        "lib/builder/handlers/styles.js": {
+            "name": "lib/builder/handlers/styles.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/builder/handlers/views.js": {
+            "name": "lib/builder/handlers/views.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/builder/builder.js": {
+            "name": "lib/builder/builder.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/compiler/handlers/fonts.js": {
+            "name": "lib/compiler/handlers/fonts.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/compiler/handlers/libs.js": {
+            "name": "lib/compiler/handlers/libs.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/compiler/handlers/schemas.js": {
+            "name": "lib/compiler/handlers/schemas.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/compiler/handlers/scripts.js": {
+            "name": "lib/compiler/handlers/scripts.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/compiler/handlers/styles.js": {
+            "name": "lib/compiler/handlers/styles.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/compiler/handlers/views.js": {
+            "name": "lib/compiler/handlers/views.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/package/package.js": {
+            "name": "lib/package/package.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/project/project.js": {
+            "name": "lib/project/project.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "Project": 1
+            },
+            "namespaces": {}
+        },
+        "lib/provision/provision.js": {
+            "name": "lib/provision/provision.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/repository/repository.js": {
+            "name": "lib/repository/repository.js",
             "modules": {},
             "classes": {},
             "fors": {},
@@ -48,84 +134,786 @@
             "classes": {},
             "fors": {},
             "namespaces": {}
+        },
+        "lib/utility.js": {
+            "name": "lib/utility.js",
+            "modules": {
+                "UPM": 1
+            },
+            "classes": {},
+            "fors": {
+                "upm": 1
+            },
+            "namespaces": {}
         }
     },
-    "modules": {},
-    "classes": {},
+    "modules": {
+        "UPM": {
+            "name": "UPM",
+            "submodules": {},
+            "classes": {
+                "Project": 1,
+                "upm": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "lib/utility.js",
+            "line": 1,
+            "description": "Helper Utility for UPM",
+            "author": "potanin@UD"
+        }
+    },
+    "classes": {
+        "Project": {
+            "name": "Project",
+            "shortname": "Project",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "UPM"
+        },
+        "upm": {
+            "name": "upm",
+            "shortname": "upm",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "UPM"
+        }
+    },
     "classitems": [
         {
-            "file": "lib/install/index.js",
+            "file": "lib/builder/handlers/fonts.js",
             "line": 1,
-            "class": ""
+            "description": "Compile Fonts",
+            "params": [
+                {
+                    "name": "builder",
+                    "description": ""
+                }
+            ],
+            "class": "Project"
         },
         {
-            "file": "lib/package/index.js",
+            "file": "lib/builder/handlers/libs.js",
             "line": 1,
-            "class": ""
+            "description": "Build PHP",
+            "params": [
+                {
+                    "name": "builder",
+                    "description": ""
+                }
+            ],
+            "class": "Project"
         },
         {
-            "file": "lib/provision/index.js",
+            "file": "lib/builder/handlers/schemas.js",
             "line": 1,
-            "class": ""
+            "description": "Build Schemas",
+            "params": [
+                {
+                    "name": "builder",
+                    "description": ""
+                }
+            ],
+            "class": "Project"
         },
         {
-            "file": "lib/repository/index.js",
+            "file": "lib/builder/handlers/scripts.js",
             "line": 1,
-            "class": ""
+            "description": "Compile JavaScript",
+            "params": [
+                {
+                    "name": "builder",
+                    "description": ""
+                }
+            ],
+            "class": "Project"
         },
         {
-            "file": "lib/scaffold/index.js",
+            "file": "lib/builder/handlers/styles.js",
             "line": 1,
-            "class": ""
+            "description": "Build/Compile Styles",
+            "params": [
+                {
+                    "name": "builder",
+                    "description": ""
+                }
+            ],
+            "class": "Project"
         },
         {
-            "file": "lib/scaffold/index.js",
-            "line": 54,
-            "class": ""
+            "file": "lib/builder/handlers/views.js",
+            "line": 1,
+            "description": "Build/Compile Views and Templates",
+            "params": [
+                {
+                    "name": "builder",
+                    "description": ""
+                }
+            ],
+            "class": "Project"
+        },
+        {
+            "file": "lib/builder/builder.js",
+            "line": 1,
+            "description": "Compiles components and outputs built files into target directories.\n\n\n   builder.addLookup( 'lib' );\n   builder.addFile('scripts', 'view.js', 'compiled view js');\n   builder.prefixUrls( options.prefix );\n   builder.copyAssetsTo( options.out );",
+            "class": "Project"
+        },
+        {
+            "file": "lib/builder/builder.js",
+            "line": 142,
+            "description": "Instance Properties.",
+            "class": "Project"
+        },
+        {
+            "file": "lib/builder/builder.js",
+            "line": 148,
+            "description": "Build asset `type` and invoke `fn(err, paths)`.",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "fn",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "api": "private",
+            "class": "Project"
+        },
+        {
+            "file": "lib/builder/builder.js",
+            "line": 220,
+            "description": "Return the configuration JSON.",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "api": "public",
+            "class": "Project"
+        },
+        {
+            "file": "lib/builder/builder.js",
+            "line": 249,
+            "description": "buildLibs.",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "api": "public",
+            "class": "Project"
+        },
+        {
+            "file": "lib/builder/builder.js",
+            "line": 262,
+            "description": "buildSchemas.",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "api": "public",
+            "class": "Project"
+        },
+        {
+            "file": "lib/builder/builder.js",
+            "line": 274,
+            "description": "Build and invoke `fn(err, res)`, where `res`\nis an object containing:\n\n - `css`\n - `js`\n - `images`\n - `fonts`\n - `files`\n\nNOTE: Batch maintains result ordering (res.shift()s here)",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "api": "public",
+            "class": "Project"
+        },
+        {
+            "file": "lib/builder/builder.js",
+            "line": 350,
+            "description": "Constructor Properties.",
+            "class": "Project"
+        },
+        {
+            "file": "lib/compiler/handlers/fonts.js",
+            "line": 1,
+            "description": "Compile Fonts",
+            "params": [
+                {
+                    "name": "builder",
+                    "description": ""
+                }
+            ],
+            "class": "Project"
+        },
+        {
+            "file": "lib/compiler/handlers/libs.js",
+            "line": 1,
+            "description": "Build PHP",
+            "params": [
+                {
+                    "name": "builder",
+                    "description": ""
+                }
+            ],
+            "class": "Project"
+        },
+        {
+            "file": "lib/compiler/handlers/schemas.js",
+            "line": 1,
+            "description": "Build Schemas",
+            "params": [
+                {
+                    "name": "builder",
+                    "description": ""
+                }
+            ],
+            "class": "Project"
+        },
+        {
+            "file": "lib/compiler/handlers/scripts.js",
+            "line": 1,
+            "description": "Compile JavaScript",
+            "params": [
+                {
+                    "name": "builder",
+                    "description": ""
+                }
+            ],
+            "class": "Project"
+        },
+        {
+            "file": "lib/compiler/handlers/styles.js",
+            "line": 1,
+            "description": "Build/Compile Styles",
+            "params": [
+                {
+                    "name": "builder",
+                    "description": ""
+                }
+            ],
+            "class": "Project"
+        },
+        {
+            "file": "lib/compiler/handlers/views.js",
+            "line": 1,
+            "description": "Build/Compile Views and Templates",
+            "params": [
+                {
+                    "name": "builder",
+                    "description": ""
+                }
+            ],
+            "class": "Project"
+        },
+        {
+            "file": "lib/package/package.js",
+            "line": 1,
+            "description": "Package Loader\n\nLoads a package from a repository and fetches all dependencies.\nAll declared component files are put into the components directory.\n\n## Events\n- file (file, url)\n- error (error)\n- end ()\n- dep (pkg)\n- exists (instance)\n\noptions.dest Relative destination path for component storage.",
+            "class": "Project"
+        },
+        {
+            "file": "lib/package/package.js",
+            "line": 66,
+            "description": "Instance Properties.",
+            "class": "Project"
+        },
+        {
+            "file": "lib/package/package.js",
+            "line": 188,
+            "description": "Enforce Lowercase",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "Project"
+        },
+        {
+            "file": "lib/package/package.js",
+            "line": 202,
+            "description": "Really install the component.",
+            "api": "public",
+            "class": "Project"
+        },
+        {
+            "file": "lib/package/package.js",
+            "line": 356,
+            "description": "Constructor Properties.",
+            "class": "Project"
+        },
+        {
+            "file": "lib/project/project.js",
+            "line": 1,
+            "description": "Instantiate a Project\n\n## Events\n- message (arg1, arv2): Important message.\n- updated (error): Project has been updated.",
+            "params": [
+                {
+                    "name": "directory",
+                    "description": "Path to project directory, otherwise assumes current.",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "Project options that may be used to overwrite component.json settings.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "Returns instance.",
+                "type": "Object"
+            },
+            "itemtype": "method",
+            "name": "Project",
+            "is_constructor": 1,
+            "class": "Project"
+        },
+        {
+            "file": "lib/project/project.js",
+            "line": 38,
+            "description": "Instance Properties.",
+            "class": "Project"
+        },
+        {
+            "file": "lib/project/project.js",
+            "line": 44,
+            "description": "Load Project.",
+            "access": "private",
+            "tagname": "",
+            "chainable": 1,
+            "itemtype": "method",
+            "name": "load",
+            "class": "Project"
+        },
+        {
+            "file": "lib/project/project.js",
+            "line": 134,
+            "description": "Create new project with scaffolding.",
+            "itemtype": "method",
+            "name": "create",
+            "class": "Project"
+        },
+        {
+            "file": "lib/project/project.js",
+            "line": 201,
+            "description": "Update Project",
+            "todo": [
+                "Add a queue so callback can be triggered when all dependencies are done."
+            ],
+            "chainable": 1,
+            "itemtype": "method",
+            "name": "update",
+            "class": "Project"
+        },
+        {
+            "file": "lib/project/project.js",
+            "line": 305,
+            "description": "Install Single Dependecy.",
+            "params": [
+                {
+                    "name": "name",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "class": "Project"
+        },
+        {
+            "file": "lib/project/project.js",
+            "line": 338,
+            "description": "Constructor Properties.",
+            "class": "Project"
+        },
+        {
+            "file": "lib/provision/provision.js",
+            "line": 1,
+            "class": "upm"
+        },
+        {
+            "file": "lib/repository/repository.js",
+            "line": 1,
+            "class": "upm"
         },
         {
             "file": "lib/upm.js",
             "line": 1,
-            "class": ""
+            "class": "upm"
         },
         {
-            "file": "lib/upm.js",
-            "line": 80,
-            "class": ""
+            "file": "lib/utility.js",
+            "line": 14,
+            "description": "Test if Target is Writable",
+            "params": [
+                {
+                    "name": "target",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "class": "upm",
+            "module": "UPM"
+        },
+        {
+            "file": "lib/utility.js",
+            "line": 50,
+            "description": "Get Namespace/Vendor name from repository",
+            "params": [
+                {
+                    "name": "repository",
+                    "description": ""
+                }
+            ],
+            "class": "upm",
+            "module": "UPM"
+        },
+        {
+            "file": "lib/utility.js",
+            "line": 92,
+            "description": "Output fatal error message and exit.",
+            "params": [
+                {
+                    "name": "msg",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "api": "private",
+            "class": "upm",
+            "module": "UPM"
+        },
+        {
+            "file": "lib/utility.js",
+            "line": 105,
+            "description": "Log the given `type` with `msg`.",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "msg",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "api": "public",
+            "class": "upm",
+            "module": "UPM"
+        },
+        {
+            "file": "lib/utility.js",
+            "line": 120,
+            "description": "Log warning message with `type` and `msg`.",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "msg",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "api": "public",
+            "class": "upm",
+            "module": "UPM"
+        },
+        {
+            "file": "lib/utility.js",
+            "line": 131,
+            "description": "Output error message.",
+            "params": [
+                {
+                    "name": "msg",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "api": "private",
+            "class": "upm",
+            "module": "UPM"
+        },
+        {
+            "file": "lib/utility.js",
+            "line": 151,
+            "description": "Merge object b with object a.",
+            "example": [
+                "\n    var a = { foo: 'bar' }\n      , b = { bar: 'baz' };\n\n    utils.merge(a, b);\n    // => { foo: 'bar', bar: 'baz' }"
+            ],
+            "params": [
+                {
+                    "name": "a",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "b",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "source": "connect",
+            "class": "upm",
+            "module": "UPM"
+        },
+        {
+            "file": "lib/utility.js",
+            "line": 185,
+            "params": [
+                {
+                    "name": "target",
+                    "description": "",
+                    "type": "String|Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "class": "upm",
+            "module": "UPM"
         }
     ],
     "warnings": [
         {
-            "message": "Missing item type",
-            "line": " lib/install/index.js:1"
+            "message": "unknown tag: api",
+            "line": " lib/builder/builder.js:148"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/builder/builder.js:220"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/builder/builder.js:249"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/builder/builder.js:262"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/builder/builder.js:274"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " lib/package/package.js:188"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/package/package.js:202"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " lib/project/project.js:1"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " lib/project/project.js:305"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " lib/utility.js:14"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/utility.js:92"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/utility.js:105"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/utility.js:120"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/utility.js:131"
+        },
+        {
+            "message": "unknown tag: source",
+            "line": " lib/utility.js:151"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " lib/utility.js:185"
+        },
+        {
+            "message": "Missing item type\nCompile Fonts",
+            "line": " lib/builder/handlers/fonts.js:1"
+        },
+        {
+            "message": "Missing item type\nBuild PHP",
+            "line": " lib/builder/handlers/libs.js:1"
+        },
+        {
+            "message": "Missing item type\nBuild Schemas",
+            "line": " lib/builder/handlers/schemas.js:1"
+        },
+        {
+            "message": "Missing item type\nCompile JavaScript",
+            "line": " lib/builder/handlers/scripts.js:1"
+        },
+        {
+            "message": "Missing item type\nBuild/Compile Styles",
+            "line": " lib/builder/handlers/styles.js:1"
+        },
+        {
+            "message": "Missing item type\nBuild/Compile Views and Templates",
+            "line": " lib/builder/handlers/views.js:1"
+        },
+        {
+            "message": "Missing item type\nCompiles components and outputs built files into target directories.\n\n\n   builder.addLookup( 'lib' );\n   builder.addFile('scripts', 'view.js', 'compiled view js');\n   builder.prefixUrls( options.prefix );\n   builder.copyAssetsTo( options.out );",
+            "line": " lib/builder/builder.js:1"
+        },
+        {
+            "message": "Missing item type\nInstance Properties.",
+            "line": " lib/builder/builder.js:142"
+        },
+        {
+            "message": "Missing item type\nBuild asset `type` and invoke `fn(err, paths)`.",
+            "line": " lib/builder/builder.js:148"
+        },
+        {
+            "message": "Missing item type\nReturn the configuration JSON.",
+            "line": " lib/builder/builder.js:220"
+        },
+        {
+            "message": "Missing item type\nbuildLibs.",
+            "line": " lib/builder/builder.js:249"
+        },
+        {
+            "message": "Missing item type\nbuildSchemas.",
+            "line": " lib/builder/builder.js:262"
+        },
+        {
+            "message": "Missing item type\nBuild and invoke `fn(err, res)`, where `res`\nis an object containing:\n\n - `css`\n - `js`\n - `images`\n - `fonts`\n - `files`\n\nNOTE: Batch maintains result ordering (res.shift()s here)",
+            "line": " lib/builder/builder.js:274"
+        },
+        {
+            "message": "Missing item type\nConstructor Properties.",
+            "line": " lib/builder/builder.js:350"
+        },
+        {
+            "message": "Missing item type\nCompile Fonts",
+            "line": " lib/compiler/handlers/fonts.js:1"
+        },
+        {
+            "message": "Missing item type\nBuild PHP",
+            "line": " lib/compiler/handlers/libs.js:1"
+        },
+        {
+            "message": "Missing item type\nBuild Schemas",
+            "line": " lib/compiler/handlers/schemas.js:1"
+        },
+        {
+            "message": "Missing item type\nCompile JavaScript",
+            "line": " lib/compiler/handlers/scripts.js:1"
+        },
+        {
+            "message": "Missing item type\nBuild/Compile Styles",
+            "line": " lib/compiler/handlers/styles.js:1"
+        },
+        {
+            "message": "Missing item type\nBuild/Compile Views and Templates",
+            "line": " lib/compiler/handlers/views.js:1"
+        },
+        {
+            "message": "Missing item type\nPackage Loader\n\nLoads a package from a repository and fetches all dependencies.\nAll declared component files are put into the components directory.\n\n## Events\n- file (file, url)\n- error (error)\n- end ()\n- dep (pkg)\n- exists (instance)\n\noptions.dest Relative destination path for component storage.",
+            "line": " lib/package/package.js:1"
+        },
+        {
+            "message": "Missing item type\nInstance Properties.",
+            "line": " lib/package/package.js:66"
+        },
+        {
+            "message": "Missing item type\nEnforce Lowercase",
+            "line": " lib/package/package.js:188"
+        },
+        {
+            "message": "Missing item type\nReally install the component.",
+            "line": " lib/package/package.js:202"
+        },
+        {
+            "message": "Missing item type\nConstructor Properties.",
+            "line": " lib/package/package.js:356"
+        },
+        {
+            "message": "Missing item type\nInstance Properties.",
+            "line": " lib/project/project.js:38"
+        },
+        {
+            "message": "Missing item type\nInstall Single Dependecy.",
+            "line": " lib/project/project.js:305"
+        },
+        {
+            "message": "Missing item type\nConstructor Properties.",
+            "line": " lib/project/project.js:338"
         },
         {
             "message": "Missing item type",
-            "line": " lib/package/index.js:1"
+            "line": " lib/provision/provision.js:1"
         },
         {
             "message": "Missing item type",
-            "line": " lib/provision/index.js:1"
-        },
-        {
-            "message": "Missing item type",
-            "line": " lib/repository/index.js:1"
-        },
-        {
-            "message": "Missing item type",
-            "line": " lib/scaffold/index.js:1"
-        },
-        {
-            "message": "Missing item type",
-            "line": " lib/scaffold/index.js:54"
+            "line": " lib/repository/repository.js:1"
         },
         {
             "message": "Missing item type",
             "line": " lib/upm.js:1"
         },
         {
+            "message": "Missing item type\nTest if Target is Writable",
+            "line": " lib/utility.js:14"
+        },
+        {
+            "message": "Missing item type\nGet Namespace/Vendor name from repository",
+            "line": " lib/utility.js:50"
+        },
+        {
+            "message": "Missing item type\nOutput fatal error message and exit.",
+            "line": " lib/utility.js:92"
+        },
+        {
+            "message": "Missing item type\nLog the given `type` with `msg`.",
+            "line": " lib/utility.js:105"
+        },
+        {
+            "message": "Missing item type\nLog warning message with `type` and `msg`.",
+            "line": " lib/utility.js:120"
+        },
+        {
+            "message": "Missing item type\nOutput error message.",
+            "line": " lib/utility.js:131"
+        },
+        {
+            "message": "Missing item type\nMerge object b with object a.",
+            "line": " lib/utility.js:151"
+        },
+        {
             "message": "Missing item type",
-            "line": " lib/upm.js:80"
+            "line": " lib/utility.js:185"
         }
     ]
 }

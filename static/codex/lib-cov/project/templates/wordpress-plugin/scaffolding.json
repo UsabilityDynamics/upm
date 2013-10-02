@@ -1,0 +1,17 @@
+{
+  "properties": {
+    "name": {
+      "pattern": "^[a-zA-Z\\.\\-\\d]+$",
+      "message": "Name must be only letters, numbers, dots, or dashes",
+      "default": "sample",
+      "required": true
+    },
+    "author": {
+      "required": true
+    }
+  },
+  "tpl": {
+    "/base.js": "{{name}}.js",
+    "/readme.md": "readme.md"
+  }
+}
